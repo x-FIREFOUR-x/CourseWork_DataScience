@@ -1,10 +1,10 @@
 USE Cryptocurrency
 
---DROP PROCEDURE Procedure_ReadData
+DROP PROCEDURE Procedure_ReadData
 
 CREATE PROCEDURE Procedure_ReadData
 	@TableName NVARCHAR(128),
-	@Path NVARCHAR(250)
+	@FileName NVARCHAR(250)
 AS 
 BEGIN 
 	SET NOCOUNT ON;
@@ -14,6 +14,8 @@ BEGIN
 	DECLARE @Sql2 NVARCHAR(MAX);
 	DECLARE @Sql3 NVARCHAR(MAX);
 
+	DECLARE @Path varchar(100);
+	SET @Path = 'D:\project c++\4Semestr\CourseWork\data\Cryptocurrency Historical Prices\' ;
 
 	SET @SqlCreate = 
 		N'Create Table' + QUOTENAME(@TableName) + 
@@ -33,7 +35,7 @@ BEGIN
 
 	SET @SqlInsert = 
 		N'BULK INSERT' + QUOTENAME(@TableName) +
-		N'FROM' + QUOTENAME(@Path) +
+		N'FROM' + QUOTENAME(@Path + @FileName) +
 		N'WITH
 		(
 				FORMAT = ''CSV'',
