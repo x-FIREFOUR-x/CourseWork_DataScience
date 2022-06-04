@@ -26,8 +26,9 @@ EXEC Procedure_ReadData  'coinXRP' ,'coin_XRP.csv'
 
 
 
-Create Table Crypto
+Create Table Cryptocurrency
 (
+	[Id] [int] IDENTITY(1,1) PRIMARY KEY,
     [Name] nvarchar(20) NOT NULL,
     [Symbol] nvarchar(10) NOT NULL,
     [Date] date NOT NULL,
@@ -40,29 +41,29 @@ Create Table Crypto
 )
 
 
-INSERT INTO Crypto SELECT * FROM coinAave
-INSERT INTO Crypto SELECT * FROM coinBinanceCoin
-INSERT INTO Crypto SELECT * FROM coinBitcoin
-INSERT INTO Crypto SELECT * FROM coinCardano
-INSERT INTO Crypto SELECT * FROM coinChainLink
-INSERT INTO Crypto SELECT * FROM coinCosmos
-INSERT INTO Crypto SELECT * FROM coinCryptocomCoin
-INSERT INTO Crypto SELECT * FROM coinDogecoin
-INSERT INTO Crypto SELECT * FROM coinEOS
-INSERT INTO Crypto SELECT * FROM coinEthereum
-INSERT INTO Crypto SELECT * FROM coinIota
-INSERT INTO Crypto SELECT * FROM coinLitecoin
-INSERT INTO Crypto SELECT * FROM coinMonero
-INSERT INTO Crypto SELECT * FROM coinNEM
-INSERT INTO Crypto SELECT * FROM coinPolkadot
-INSERT INTO Crypto SELECT * FROM coinSolana
-INSERT INTO Crypto SELECT * FROM coinStellar
-INSERT INTO Crypto SELECT * FROM coinTether
-INSERT INTO Crypto SELECT * FROM coinTron
-INSERT INTO Crypto SELECT * FROM coinUniswap
-INSERT INTO Crypto SELECT * FROM coinUSDCoin
-INSERT INTO Crypto SELECT * FROM coinWrappedBitcoin
-INSERT INTO Crypto SELECT * FROM coinXRP
+INSERT INTO Cryptocurrency SELECT * FROM coinAave
+INSERT INTO Cryptocurrency SELECT * FROM coinBinanceCoin
+INSERT INTO Cryptocurrency SELECT * FROM coinBitcoin
+INSERT INTO Cryptocurrency SELECT * FROM coinCardano
+INSERT INTO Cryptocurrency SELECT * FROM coinChainLink
+INSERT INTO Cryptocurrency SELECT * FROM coinCosmos
+INSERT INTO Cryptocurrency SELECT * FROM coinCryptocomCoin
+INSERT INTO Cryptocurrency SELECT * FROM coinDogecoin
+INSERT INTO Cryptocurrency SELECT * FROM coinEOS
+INSERT INTO Cryptocurrency SELECT * FROM coinEthereum
+INSERT INTO Cryptocurrency SELECT * FROM coinIota
+INSERT INTO Cryptocurrency SELECT * FROM coinLitecoin
+INSERT INTO Cryptocurrency SELECT * FROM coinMonero
+INSERT INTO Cryptocurrency SELECT * FROM coinNEM
+INSERT INTO Cryptocurrency SELECT * FROM coinPolkadot
+INSERT INTO Cryptocurrency SELECT * FROM coinSolana
+INSERT INTO Cryptocurrency SELECT * FROM coinStellar
+INSERT INTO Cryptocurrency SELECT * FROM coinTether
+INSERT INTO Cryptocurrency SELECT * FROM coinTron
+INSERT INTO Cryptocurrency SELECT * FROM coinUniswap
+INSERT INTO Cryptocurrency SELECT * FROM coinUSDCoin
+INSERT INTO Cryptocurrency SELECT * FROM coinWrappedBitcoin
+INSERT INTO Cryptocurrency SELECT * FROM coinXRP
 
 
 /*
@@ -117,11 +118,11 @@ DROP TABLE coinWrappedBitcoin
 DROP TABLE coinXRP
 
 
-SELECT * FROM Crypto
+SELECT * FROM Cryptocurrency
 ORDER BY Name
 
-SELECT [Name] FROM Crypto
+SELECT [Name] FROM Cryptocurrency
 GROUP BY [Name] 
 ORDER BY Name
 
---DROP TABLE Crypto
+--DROP TABLE Cryptocurrency

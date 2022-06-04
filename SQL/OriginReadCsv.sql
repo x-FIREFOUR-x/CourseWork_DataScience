@@ -18,7 +18,7 @@ Create Table coinAave
 
 
 BULK INSERT dbo.coinAave
-FROM 'D:\project c++\4Semestr\CourseWork\data\Cryptocurrency Historical Prices\coin_Aave.csv'
+FROM 'D:\project c++\4Semestr\CourseWork\data\CryptocurrencyHistoricalPrices\coin_Aave.csv'
 WITH
 (
         FORMAT = 'CSV',

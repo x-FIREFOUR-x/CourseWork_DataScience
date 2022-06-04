@@ -15,7 +15,7 @@ BEGIN
 	DECLARE @Sql3 NVARCHAR(MAX);
 
 	DECLARE @Path varchar(100);
-	SET @Path = 'D:\project c++\4Semestr\CourseWork\data\Cryptocurrency Historical Prices\' ;
+	SET @Path = 'D:\project c++\4Semestr\CourseWork\data\CryptocurrencyHistoricalPrices\' ;
 
 	SET @SqlCreate = 
 		N'Create Table' + QUOTENAME(@TableName) + 
