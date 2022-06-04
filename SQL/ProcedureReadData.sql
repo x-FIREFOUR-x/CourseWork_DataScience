@@ -10,9 +10,6 @@ BEGIN
 	SET NOCOUNT ON;
 	DECLARE @SqlCreate NVARCHAR(MAX);
 	DECLARE @SqlInsert NVARCHAR(MAX);
-	DECLARE @Sql1 NVARCHAR(MAX);
-	DECLARE @Sql2 NVARCHAR(MAX);
-	DECLARE @Sql3 NVARCHAR(MAX);
 
 	DECLARE @Path varchar(100);
 	SET @Path = 'D:\project c++\4Semestr\CourseWork\data\CryptocurrencyHistoricalPrices\' ;
@@ -45,22 +42,9 @@ BEGIN
 		)'
 	
 
-	SET @Sql1 = 
-		N'UPDATE' + QUOTENAME(@TableName) +
-		N'SET [Date] = (SELECT TOP(1) * FROM string_split([Date], '' '') )'
-
-	SET @Sql2 =
-		N'ALTER TABLE' + QUOTENAME(@TableName) + N'ALTER COLUMN [Date] date NOT NULL'
-
-	SET @Sql3 =
-		N'ALTER TABLE' + QUOTENAME(@TableName) + N'DROP COLUMN [SNo]'
-
 
 		EXECUTE sp_executesql @SqlCreate
 		EXECUTE sp_executesql @SqlInsert
-		EXECUTE sp_executesql @Sql1
-		EXECUTE sp_executesql @Sql2
-		EXECUTE sp_executesql @Sql3
 
 END
 

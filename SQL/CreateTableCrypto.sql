@@ -1,5 +1,8 @@
 USE Cryptocurrency
 
+
+	--EXTRACT
+
 EXEC Procedure_ReadData  'coinAave' , 'coin_Aave.csv'
 EXEC Procedure_ReadData  'coinBinanceCoin' ,'coin_BinanceCoin.csv' 
 EXEC Procedure_ReadData  'coinBitcoin' ,'coin_Bitcoin.csv' 
@@ -25,6 +28,36 @@ EXEC Procedure_ReadData  'coinWrappedBitcoin' ,'coin_WrappedBitcoin.csv'
 EXEC Procedure_ReadData  'coinXRP' ,'coin_XRP.csv' 
 
 
+
+	--TRANSFORM
+
+EXEC Procedure_TransformData  'coinAave' 
+EXEC Procedure_TransformData  'coinBinanceCoin'  
+EXEC Procedure_TransformData  'coinBitcoin'  
+EXEC Procedure_TransformData  'coinCardano' 
+EXEC Procedure_TransformData  'coinChainLink'  
+EXEC Procedure_TransformData  'coinCosmos'  
+EXEC Procedure_TransformData  'coinCryptocomCoin'  
+EXEC Procedure_TransformData  'coinDogecoin'  
+EXEC Procedure_TransformData  'coinEOS'  
+EXEC Procedure_TransformData  'coinEthereum' 
+EXEC Procedure_TransformData  'coinIota' 
+EXEC Procedure_TransformData  'coinLitecoin'  
+EXEC Procedure_TransformData  'coinMonero'  
+EXEC Procedure_TransformData  'coinNEM'  
+EXEC Procedure_TransformData  'coinPolkadot'  
+EXEC Procedure_TransformData  'coinSolana'  
+EXEC Procedure_TransformData  'coinStellar' 
+EXEC Procedure_TransformData  'coinTether'  
+EXEC Procedure_TransformData  'coinTron' 
+EXEC Procedure_TransformData  'coinUniswap' 
+EXEC Procedure_TransformData  'coinUSDCoin' 
+EXEC Procedure_TransformData  'coinWrappedBitcoin' 
+EXEC Procedure_TransformData  'coinXRP' 
+
+
+
+	--LOAD
 
 Create Table Cryptocurrency
 (
