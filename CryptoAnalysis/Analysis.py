@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import statsmodels.tsa.api as smt
 
 
 
@@ -82,3 +83,18 @@ def correlation_matrix(df):
     corr = df[['High', 'Low', 'Open', 'Close', 'Volume', 'Marketcap', 'amountToken']].corr()
     print("Matrix correlation" + df.loc[df.index[0]]['Name'])
     print(corr)
+
+
+
+def decompose(df):
+    decomposition = smt.seasonal_decompose(df[~df.isna()])
+    fig = decomposition.plot()
+    fig.set_size_inches(15, 10)
+    plt.show()
+
+
+def decompose_interval(df, start_date, end_date):
+    decomposition = smt.seasonal_decompose(df.loc[start_date + ' 00:00:00' : end_date + ' 00:00:00'][~df.isna()])
+    fig = decomposition.plot()
+    fig.set_size_inches(15, 10)
+    plt.show()

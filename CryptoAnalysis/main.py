@@ -40,3 +40,8 @@ if __name__ == '__main__':
 
     correlation_matrix(df2)
     '''
+
+    '''
+    decompose(df['High'])
+    decompose_interval(df['High'], '2020-01-01', '2021-12-30')
+    '''
