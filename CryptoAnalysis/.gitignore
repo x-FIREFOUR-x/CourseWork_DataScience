@@ -9,6 +9,7 @@ __pycache__/
 *.so
 
 Config.py
+.idea
 
 # Distribution / packaging
 .Python
