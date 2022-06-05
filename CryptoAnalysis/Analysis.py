@@ -91,18 +91,24 @@ def correlation_matrix(df):
 
 
     # декомпозиція часового ряду на тренд, сезонність і домішки
-def decompose(df):
-    decomposition = smt.seasonal_decompose(df[~df.isna()])
+def decompose(df, column):
+    series = df[column]
+    decomposition = smt.seasonal_decompose(series[~series.isna()])
     fig = decomposition.plot()
     fig.set_size_inches(15, 10)
+    title = 'Декомпозиція крипто валюти ' + df.loc[df.index[0]]['Name']
+    fig.suptitle(title, fontsize=15)
     plt.show()
 
 
     #декомпозиція часового ряду на тренд, сезонність і домішки за проміжок часу [start_date; end_date]
-def decompose_interval(df, start_date, end_date):
-    decomposition = smt.seasonal_decompose(df.loc[start_date + ' 00:00:00' : end_date + ' 00:00:00'][~df.isna()])
+def decompose_interval(df, column, start_date, end_date):
+    series = df[column]
+    decomposition = smt.seasonal_decompose(series.loc[start_date + ' 00:00:00' : end_date + ' 00:00:00'][~series.isna()])
     fig = decomposition.plot()
     fig.set_size_inches(15, 10)
+    title = 'Декомпозиція крипто валюти ' + df.loc[df.index[0]]['Name']
+    fig.suptitle(title, fontsize=15)
     plt.show()
 
 
@@ -110,7 +116,8 @@ def decompose_interval(df, start_date, end_date):
 
 
     #тест Діккі-Фуллера на стаціонарність рядку
-def dickey_fuller_test(series):
+def dickey_fuller_test(df, column):
+    series = df[column]
     test = smt.adfuller(series[~series.isna()], autolag='AIC')
     print('adf: ', test[0])
     print('p-value: ', test[1])
@@ -122,9 +129,11 @@ def dickey_fuller_test(series):
 
 
 
-def autocorr_partautocorr(series):
+def autocorr_partautocorr(df, column):
+    series = df[column]
     fig, ax = plt.subplots(2, figsize=(15, 10))
-    fig.suptitle('', fontsize=20)
+    title = 'Автокореляція і часткова автокориляція ' + df.loc[df.index[0]]['Name'] + ' величини ' + column
+    fig.suptitle(title, fontsize=15)
     ax[0] = plot_acf(series[~series.isna()], ax=ax[0], lags=120)
     ax[1] = plot_pacf(series[~series.isna()], ax=ax[1], lags=120)
     plt.show()

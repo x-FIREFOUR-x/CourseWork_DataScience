@@ -42,11 +42,11 @@ if __name__ == '__main__':
     '''
 
     '''
-    decompose(df['High'])
-    decompose_interval(df['High'], '2020-01-01', '2021-12-30')
+    decompose(df, 'High')
+    decompose_interval(df, 'High', '2020-01-01', '2021-12-30')
     
-    dickey_fuller_test(df['High'])
+    dickey_fuller_test(df, 'High')
 
 
-    autocorr_partautocorr(df['High'])
+    autocorr_partautocorr(df, 'High')
     '''
