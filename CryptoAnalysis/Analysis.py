@@ -78,6 +78,7 @@ def graph_interval_timesequence_cryptos(dfs, name_column, start_date, end_date):
 
 
 
+
     #матриця кореляції
 def correlation_matrix(df):
     corr = df[['High', 'Low', 'Open', 'Close', 'Volume', 'Marketcap', 'amountToken']].corr()
@@ -86,6 +87,9 @@ def correlation_matrix(df):
 
 
 
+
+
+    # декомпозиція часового ряду на тренд, сезонність і домішки
 def decompose(df):
     decomposition = smt.seasonal_decompose(df[~df.isna()])
     fig = decomposition.plot()
@@ -93,8 +97,24 @@ def decompose(df):
     plt.show()
 
 
+    #декомпозиція часового ряду на тренд, сезонність і домішки за проміжок часу [start_date; end_date]
 def decompose_interval(df, start_date, end_date):
     decomposition = smt.seasonal_decompose(df.loc[start_date + ' 00:00:00' : end_date + ' 00:00:00'][~df.isna()])
     fig = decomposition.plot()
     fig.set_size_inches(15, 10)
     plt.show()
+
+
+
+
+
+    #тест Діккі-Фуллера на стаціонарність рядку
+def dickey_fuller_test(series):
+    test = smt.adfuller(series[~series.isna()], autolag='AIC')
+    print('adf: ', test[0])
+    print('p-value: ', test[1])
+    print('Critical values: ', test[4])
+    if test[0] > test[4]['5%']:
+        print('Наявні одиничні корені, ряд не стаціонарний.')
+    else:
+        print('Одиничні корені відсутні, ряд є стаціонарним.')
