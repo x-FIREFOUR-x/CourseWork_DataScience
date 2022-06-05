@@ -10,6 +10,9 @@ __pycache__/
 
 Config.py
 .idea
+.CryptoAnalysis/idea
+.CryptoAnalysis/venv
+.vs
 
 # Distribution / packaging
 .Python
