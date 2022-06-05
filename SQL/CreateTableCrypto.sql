@@ -151,10 +151,12 @@ DROP TABLE coinWrappedBitcoin
 DROP TABLE coinXRP
 
 
-SELECT * FROM Cryptocurrency
+SELECT * 
+FROM Cryptocurrency
 ORDER BY Name
 
-SELECT [Name] FROM Cryptocurrency
+SELECT [Name], Count(*)  AS [Count]
+FROM Cryptocurrency
 GROUP BY [Name] 
 ORDER BY Name
 
