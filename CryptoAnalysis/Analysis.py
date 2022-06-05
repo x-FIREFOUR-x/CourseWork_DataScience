@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import statsmodels.tsa.api as smt
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 
 
@@ -118,3 +119,12 @@ def dickey_fuller_test(series):
         print('Наявні одиничні корені, ряд не стаціонарний.')
     else:
         print('Одиничні корені відсутні, ряд є стаціонарним.')
+
+
+
+def autocorr_partautocorr(series):
+    fig, ax = plt.subplots(2, figsize=(15, 10))
+    fig.suptitle('', fontsize=20)
+    ax[0] = plot_acf(series[~series.isna()], ax=ax[0], lags=120)
+    ax[1] = plot_pacf(series[~series.isna()], ax=ax[1], lags=120)
+    plt.show()
