@@ -1,6 +1,11 @@
 import matplotlib.pyplot as plt
 import statsmodels.tsa.api as smt
+import pandas as pd
+import numpy as np
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from scipy.fftpack import ifft
+from scipy import signal
+import pywt
 
 
 
@@ -137,3 +142,88 @@ def autocorr_partautocorr(df, column):
     ax[0] = plot_acf(series[~series.isna()], ax=ax[0], lags=120)
     ax[1] = plot_pacf(series[~series.isna()], ax=ax[1], lags=120)
     plt.show()
+
+def madev(d):
+    return np.mean(np.absolute(d - np.mean(d)))
+
+def wavelet_smoothing(x, wavelet='db4', level=1):
+    coeff = pywt.wavedec(x, wavelet, mode="per")
+    sigma = (1/0.6745) * madev(coeff[-level])
+    uthresh = sigma * np.sqrt(2 * np.log(len(x)))
+    coeff[1:] = (pywt.threshold(i, value=uthresh, mode='hard') for i in coeff[1:])
+    return pywt.waverec(coeff, wavelet, mode='per')
+
+def wavelet_smoothing_plot(x, column, n):
+    x = x[column]
+    filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, label='Raw')
+    filtered = list(filtered)
+    filtered.pop(0)
+    print(len(filtered))
+    filtered_frame = pd.DataFrame(filtered, index = x.index)
+    plt.plot(filtered_frame, label='Filtered')
+    plt.legend()
+    plt.title(f"DWT Denoising with {n} Wavelets", size=15)
+    plt.show()
+
+def wavelet_smoothing_with_interval_plot(x, column, n, start_date, end_date):
+    x = x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
+    filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, label='Raw')
+    filtered = list(filtered)
+    filtered.pop(0)
+    print(len(filtered))
+    filtered_frame = pd.DataFrame(filtered, index = x.index)
+    plt.plot(filtered_frame, label='Filtered')
+    plt.legend()
+    plt.title(f"DWT Denoising with {n} Wavelets", size=15)
+    plt.show()
+
+def fft_smoothing_plot(x, column, sigma = 40, m = 1):
+    x = x[column]
+    win = np.roll(signal.general_gaussian(x.shape[0], m, sigma), x.shape[0] // 2)
+    XX = np.hstack((x, np.flip(x)))
+    fXX = np.fft.fft(XX, n = x.shape[0])
+    XXf = np.real(np.fft.ifft(fXX * win))[:x.shape[0]]
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, label='Raw')
+    filtered_frame = pd.DataFrame(XXf, index=x.index)
+    plt.plot(filtered_frame, label='Filtered')
+    plt.legend()
+    plt.title(f"FFT Denoising with sigma = {sigma} and m = {m}", size=15)
+    plt.show()
+
+def fft_smoothing_with_interval_plot(x, column,start_date, end_date ,sigma = 40, m = 1):
+    x = x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
+    win = np.roll(signal.general_gaussian(x.shape[0], m, sigma), x.shape[0] // 2)
+    XX = np.hstack((x, np.flip(x)))
+    fXX = np.fft.fft(XX, n = x.shape[0])
+    XXf = np.real(np.fft.ifft(fXX * win))[:x.shape[0]]
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, label='Raw')
+    filtered_frame = pd.DataFrame(XXf, index=x.index)
+    plt.plot(filtered_frame, label='Filtered')
+    plt.legend()
+    plt.title(f"FFT Denoising", size=15)
+    plt.show()
+
+def move_average_plot(x, column, n):
+    x=x[column]
+    rolling_mean = x.rolling(n).mean()
+    plt.figure(f'Rolling with n = {n}, {column}')
+    plt.plot(x, label='Raw')
+    plt.plot(rolling_mean, label='Filtred')
+    plt.legend(loc='upper left')
+    plt.show()
+
+def move_average_with_interval_plot(x, column, n, start_date, end_date):
+    x=x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
+    rolling_mean = x.rolling(n).mean()
+    plt.figure(f'Rolling with n = {n}, {column}')
+    plt.plot(x, label='Raw')
+    plt.plot(rolling_mean, label='Filtred')
+    plt.legend(loc='upper left')
+    plt.show()
+

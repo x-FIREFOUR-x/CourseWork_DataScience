@@ -24,6 +24,11 @@ if __name__ == '__main__':
     print(df.head(10).to_string())
     print(df.info())
 
+    #wavelet_smoothing_plot(df, 'Close', 5)
+    #wavelet_smoothing_with_interval_plot(df, 'Open', 5, '2020-01-01', '2021-12-30')
+    #fft_smoothing_plot(df, 'Close')
+    #move_average_plot(df, 'Close', 10)
+
     '''
     graph_timesequences(df, ['Open'])
     graph_interval_timesequences(df, ['Open'], '2020-01-01', '2021-12-30')
