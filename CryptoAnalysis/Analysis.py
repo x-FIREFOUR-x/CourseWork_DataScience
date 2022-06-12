@@ -133,7 +133,7 @@ def dickey_fuller_test(df, column):
         print('Одиничні корені відсутні, ряд є стаціонарним.')
 
 
-
+    #аутокореляція і часткова автокореляція
 def autocorr_partautocorr(df, column):
     series = df[column]
     fig, ax = plt.subplots(2, figsize=(15, 10))
@@ -143,16 +143,26 @@ def autocorr_partautocorr(df, column):
     ax[1] = plot_pacf(series[~series.isna()], ax=ax[1], lags=120)
     plt.show()
 
+
+
+
+
+    #середнє квадратичне відхилення d
 def madev(d):
     return np.mean(np.absolute(d - np.mean(d)))
 
-def wavelet_smoothing(x, wavelet='db4', level=1):
+
+
+    #згладжування методом Вейвлет
+def wavelet_smoothing(x, level=1, wavelet='db4'):
     coeff = pywt.wavedec(x, wavelet, mode="per")
     sigma = (1/0.6745) * madev(coeff[-level])
     uthresh = sigma * np.sqrt(2 * np.log(len(x)))
     coeff[1:] = (pywt.threshold(i, value=uthresh, mode='hard') for i in coeff[1:])
     return pywt.waverec(coeff, wavelet, mode='per')
 
+
+    #побудова графіка згладжуваних послідовностей методом Вейвлет
 def wavelet_smoothing_plot(x, column, n):
     x = x[column]
     filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
@@ -160,13 +170,14 @@ def wavelet_smoothing_plot(x, column, n):
     plt.plot(x, label='Raw')
     filtered = list(filtered)
     filtered.pop(0)
-    print(len(filtered))
     filtered_frame = pd.DataFrame(filtered, index = x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
-    plt.title(f"DWT Denoising with {n} Wavelets", size=15)
+    plt.title(f"DWT Denoising with {n} Wavelets, {column}", size=15)
     plt.show()
 
+
+    #побудова графіка згладжуваних послідовностей на інтервалі методом Вейвлет
 def wavelet_smoothing_with_interval_plot(x, column, n, start_date, end_date):
     x = x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
     filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
@@ -174,14 +185,17 @@ def wavelet_smoothing_with_interval_plot(x, column, n, start_date, end_date):
     plt.plot(x, label='Raw')
     filtered = list(filtered)
     filtered.pop(0)
-    print(len(filtered))
     filtered_frame = pd.DataFrame(filtered, index = x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
-    plt.title(f"DWT Denoising with {n} Wavelets", size=15)
+    plt.title(f"DWT Denoising with {n} Wavelets, {column}", size=15)
     plt.show()
 
-def fft_smoothing_plot(x, column, sigma = 40, m = 1):
+
+
+
+    #побудова графіка згладжуваних послідовностей методом Фур'є
+def fft_smoothing_plot(x, column, sigma=40, m=1):
     x = x[column]
     win = np.roll(signal.general_gaussian(x.shape[0], m, sigma), x.shape[0] // 2)
     XX = np.hstack((x, np.flip(x)))
@@ -192,10 +206,12 @@ def fft_smoothing_plot(x, column, sigma = 40, m = 1):
     filtered_frame = pd.DataFrame(XXf, index=x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
-    plt.title(f"FFT Denoising with sigma = {sigma} and m = {m}", size=15)
+    plt.title(f"FFT Denoising with sigma = {sigma} and m = {m}, {column}", size=15)
     plt.show()
 
-def fft_smoothing_with_interval_plot(x, column,start_date, end_date ,sigma = 40, m = 1):
+
+    #побудова графіка згладжуваних послідовностей на інтервалі методом Фур'є
+def fft_smoothing_with_interval_plot(x, column, start_date, end_date, sigma=40, m=1):
     x = x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
     win = np.roll(signal.general_gaussian(x.shape[0], m, sigma), x.shape[0] // 2)
     XX = np.hstack((x, np.flip(x)))
@@ -206,24 +222,32 @@ def fft_smoothing_with_interval_plot(x, column,start_date, end_date ,sigma = 40,
     filtered_frame = pd.DataFrame(XXf, index=x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
-    plt.title(f"FFT Denoising", size=15)
+    plt.title(f"FFT Denoising with sigma = {sigma} and m = {m}, {column}", size=15)
     plt.show()
 
+
+
+
+    #побудова графіка згладжуваних послідовностей методом ковзаючого середнього
 def move_average_plot(x, column, n):
     x=x[column]
     rolling_mean = x.rolling(n).mean()
-    plt.figure(f'Rolling with n = {n}, {column}')
+    plt.figure(figsize=(10, 6))
     plt.plot(x, label='Raw')
     plt.plot(rolling_mean, label='Filtred')
     plt.legend(loc='upper left')
+    plt.title(f'Rolling with n = {n}, {column}', size=15)
     plt.show()
 
+
+    #побудова графіка згладжуваних послідовностей на інтервалі методом ковзаючого середнього
 def move_average_with_interval_plot(x, column, n, start_date, end_date):
     x=x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
     rolling_mean = x.rolling(n).mean()
-    plt.figure(f'Rolling with n = {n}, {column}')
+    plt.figure(figsize=(10, 6))
     plt.plot(x, label='Raw')
     plt.plot(rolling_mean, label='Filtred')
     plt.legend(loc='upper left')
+    plt.title(f'Rolling with n = {n}, {column}', size=15)
     plt.show()
 
