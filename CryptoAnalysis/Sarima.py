@@ -11,6 +11,10 @@ from itertools import product                    # some useful functions
 from sklearn.metrics import r2_score, median_absolute_error, mean_absolute_error, mean_absolute_percentage_error
 from sklearn.metrics import median_absolute_error, mean_squared_error, mean_squared_log_error
 
+
+
+
+
 def SARIMA(df, column):
     ps = range(2, 5)
     d = 1
@@ -25,35 +29,49 @@ def SARIMA(df, column):
     parameters_list = list(parameters)
     len(parameters_list)
 
+    # split dataframe to train and test dataframe (timeseries)
+    len_test = 20
+    len_train = 255
+    dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
-    len_test_data = 276
-    df_train, len_test_data = train_data(df, column, len_test_data)
-    
-    result_table = optimizeSARIMA(df_train, column, parameters_list, d, D, s)
+    # select better parameters model
+    result_table = optimizeSARIMA(train_df, column, parameters_list, d, D, s)
     p, q, P, Q = result_table.parameters[0]
 
-    best_model = sm.tsa.statespace.SARIMAX(df_train[column], order=(p, d, q),seasonal_order=(P, D, Q, s)).fit(disp=-1)
+    # build best model
+    best_model = sm.tsa.statespace.SARIMAX(train_df[column], order=(p, d, q), seasonal_order=(P, D, Q, s)).fit(disp=-1)
     print(best_model.summary())
 
-    plotSARIMA(df[column], column, best_model, len_test_data, 50, s, d)
+    # build plot
+    plotSARIMA(df[column], column, best_model, len_test, 50, s, d)
 
     '''
-    len_test_data = 276
-    series, len_test_data = train_data(df, column, len_test_data)
-    best_model = sm.tsa.statespace.SARIMAX(series[column], order=(4, d, 4), seasonal_order=(1, D, 0, s)).fit(disp=-1)
-    plotSARIMA(df[column], column, best_model, len_test_data, 50, s, d)
+    len_test = 20
+    len_train = 255
+    dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
+
+    best_model = sm.tsa.statespace.SARIMAX(train_df[column], order=(4, d, 4), seasonal_order=(1, D, 0, s)).fit(disp=-1)
+    plotSARIMA(dfs[column], column, best_model, len_test, 50, s, d)
     '''
 
-def train_data(df, column, len_test_data=365):
-    train_date = df
-    if (df.shape[0] >= len_test_data):
-        train_date = df[0: df.shape[0]-len_test_data]
+
+
+def train_test_data(df, column, len_train_data, len_test_data=365):
+    dfs = df
+    if (len_train_data + len_test_data <= df.shape[0]):
+        dfs = dfs[dfs.shape[0]-len_train_data-len_test_data:]
     else:
-        len_test_data = 0
+        len_test_data = (int)(dfs.shape[0] / 5)
+        len_train_data = dfs.shape[0] - len_test_data
 
-    return (train_date, len_test_data)
+    train_date = dfs[0: len_train_data]
+    test_date = dfs[len_train_data+1:]
+
+    return (dfs, train_date, test_date, len_train_data, len_test_data)
 
 
+
+    #select the best parameters model SARIMA
 def optimizeSARIMA(df, column, parameters_list, d, D, s):
     """Return dataframe with parameters and corresponding AIC
 
@@ -95,6 +113,8 @@ def optimizeSARIMA(df, column, parameters_list, d, D, s):
     return result_table
 
 
+
+    #build plot SARIMA
 def plotSARIMA(series, column, model, len_test_data, len_forcast, s, d):
     """Plots model vs predicted values
         series - dataset with timeseries
@@ -119,7 +139,7 @@ def plotSARIMA(series, column, model, len_test_data, len_forcast, s, d):
 
     plt.figure(figsize=(15, 7))
     #plt.title("Forkast model SARIMA, paramet: " + column + "\nMean Absolute Percentage Error: {0:.2f}%".format(error))
-    plt.title("Forkast model SARIMA, paramet: " + column)
+    plt.title("Forkast model SARIMA, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(data.index[data.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')
     plt.plot(data.actual, label="actual")
