@@ -47,7 +47,7 @@ def SARIMA(df, column):
     plotSARIMA(df[column], best_model, 50, s, d)
     '''
 
-    best_model = sm.tsa.statespace.SARIMAX(df[column], order=(4, d, 4), seasonal_order=(1, D, 1, s)).fit(disp=-1)
+    best_model = sm.tsa.statespace.SARIMAX(df[column].head(10), order=(4, d, 4), seasonal_order=(1, D, 1, s)).fit(disp=-1)
     plotSARIMA(df[column], best_model, 50, s, d)
 
 
@@ -112,8 +112,9 @@ def plotSARIMA(series, model, n_steps, s, d):
 
     # adding model values
     data = series.copy()
-    data.columns = ['actual']
+    data = pd.DataFrame(list(data), columns=['actual'], index=data.index)
     data['sarima_model'] = model.fittedvalues
+
     # making a shift on s+d steps, because these values were unobserved by the model
     # due to the differentiating
     data['sarima_model'][:s + d] = np.NaN
