@@ -6,7 +6,7 @@ from Config import engine
 from ProcessData import *
 from Analysis import *
 from Arima import *
-from Sarima import *
+from Sarimax import *
 
 
 
@@ -27,8 +27,11 @@ if __name__ == '__main__':
     print(df.head(10).to_string())
     print(df.info())
 
-    SARIMA(df, 'Low')
-    ARIMA(df, 'Low')
+
+    #ARIMA(df, 'Low')
+    SARIMAX(df, 'Low')
+
+
     '''
     print(df.index[-1])
 

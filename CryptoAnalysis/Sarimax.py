@@ -11,11 +11,12 @@ from itertools import product                    # some useful functions
 from sklearn.metrics import r2_score, median_absolute_error, mean_absolute_error, mean_absolute_percentage_error
 from sklearn.metrics import median_absolute_error, mean_squared_error, mean_squared_log_error
 
+import statsmodels.tsa.api as smt
 
 from Models import *
 
 
-def SARIMA(df, column):
+def SARIMAX(df, column):
     ps = range(2, 5)
     d = 1
     qs = range(2, 5)
@@ -31,11 +32,11 @@ def SARIMA(df, column):
 
     # split dataframe to train and test dataframe (timeseries)
     len_test = 20
-    len_train = 255
+    len_train = 225
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
     # select better parameters model
-    result_table = optimizeSARIMA(train_df, column, parameters_list, d, D, s)
+    result_table = optimizeSARIMAX(train_df, column, parameters_list, d, D, s)
     p, q, P, Q = result_table.parameters[0]
 
     # build best model
@@ -43,7 +44,7 @@ def SARIMA(df, column):
     print(best_model.summary())
 
     # build plot
-    plotSARIMA(df[column], column, best_model, len_test, 50, s, d)
+    plotSARIMAX(dfs[column], column, best_model, len_test, 50, s, d)
 
     '''
     len_test = 20
@@ -56,12 +57,8 @@ def SARIMA(df, column):
 
 
 
-
-
-
-
     #select the best parameters model SARIMA
-def optimizeSARIMA(df, column, parameters_list, d, D, s):
+def optimizeSARIMAX(df, column, parameters_list, d, D, s):
     """Return dataframe with parameters and corresponding AIC
 
         parameters_list - list with (p, q, P, Q) tuples
@@ -104,7 +101,7 @@ def optimizeSARIMA(df, column, parameters_list, d, D, s):
 
 
     #build plot SARIMA
-def plotSARIMA(series, column, model, len_test_data, len_forcast, s, d):
+def plotSARIMAX(series, column, model, len_test_data, len_forcast, s, d):
     """Plots model vs predicted values
         series - dataset with timeseries
         column - column timeserias in serias
@@ -121,14 +118,13 @@ def plotSARIMA(series, column, model, len_test_data, len_forcast, s, d):
     data['sarima_model'] = model.fittedvalues
 
     # forecasting on test_data and n_steps forward
-    forecast = model.predict(start=data.shape[0] - len_test_data, end=data.shape[0] + len_forcast)
+    forecast = model.predict(start=data.shape[0] - len_test_data - 1, end=data.shape[0] + len_forcast)
     forecast = data.sarima_model.append(forecast)
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 
     plt.figure(figsize=(15, 7))
-    #plt.title("Forkast model SARIMA, paramet: " + column + "\nMean Absolute Percentage Error: {0:.2f}%".format(error))
-    plt.title("Forkast model SARIMA, column: " + column)
+    plt.title("Forkast model SARIMAX, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(data.index[data.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')
     plt.plot(data.actual, label="actual")
