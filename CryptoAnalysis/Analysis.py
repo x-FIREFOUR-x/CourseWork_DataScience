@@ -129,8 +129,11 @@ def dickey_fuller_test(df, column):
     print('Critical values: ', test[4])
     if test[0] > test[4]['5%']:
         print('Наявні одиничні корені, ряд не стаціонарний.')
+        return False
     else:
         print('Одиничні корені відсутні, ряд є стаціонарним.')
+        return True
+
 
 
     #аутокореляція і часткова автокореляція

@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from Config import engine
 from ProcessData import *
 from Analysis import *
+from Arima import *
 from Sarima import *
 
 
@@ -19,14 +20,23 @@ pd.set_option('display.width', desired_width)
 
 if __name__ == '__main__':
 
-    a = "Aave"
     #a = "Bitcoin"
+    a = "Aave"
     df = read_time_sequence(a)
     create_column_amountToken(df)
     print(df.head(10).to_string())
     print(df.info())
 
     SARIMA(df, 'Low')
+    ARIMA(df, 'Low')
+    '''
+    print(df.index[-1])
+
+    #dickey_fuller_test(df, 'Open')
+    autocorr_partautocorr(df, 'Open')
+    #model_arima(df, 'Open', p=1, d=1, q=2)
+    model_arima(df, 'Open', p=3, d=1, q=3)
+    '''
 
     '''
     graph_timesequences(df, ['Open'])
