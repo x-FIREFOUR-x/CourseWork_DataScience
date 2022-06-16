@@ -5,8 +5,10 @@ from sqlalchemy import create_engine
 from Config import engine
 from ProcessData import *
 from Analysis import *
+
 from Arima import *
 from Sarimax import *
+from Ses import *
 
 
 
@@ -20,8 +22,8 @@ pd.set_option('display.width', desired_width)
 
 if __name__ == '__main__':
 
-    #a = "Bitcoin"
-    a = "Aave"
+    a = "Bitcoin"
+    #a = "Aave"
     df = read_time_sequence(a)
     create_column_amountToken(df)
     print(df.head(10).to_string())
@@ -29,7 +31,9 @@ if __name__ == '__main__':
 
 
     #ARIMA(df, 'Low')
-    SARIMAX(df, 'Low')
+    #SARIMAX(df, 'Low')
+    SES(df, 'Low')
+
 
 
     '''
