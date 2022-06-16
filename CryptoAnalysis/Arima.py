@@ -4,68 +4,40 @@ warnings.filterwarnings('ignore')
 import pandas as pd                              # tables and data manipulations
 import matplotlib.pyplot as plt                  # plots
 
-import statsmodels.api as sm
-
 from itertools import product                    # some useful functions
 
-from Analysis import *
+import statsmodels.tsa.api as smt
+
 from Models import *
-
-
-def model_arima(df, column, p, d, q):
-    train_data = df[column].loc[df.index[0:]]
-    print(train_data.head(10))
-    train_data.describe()
-    print(train_data.head())
-
-    '''
-    d = 0
-    if(dickey_fuller_test(df, column)):
-        d = 0
-    else:
-        d = 1
-    '''
-
-    #model = smt.ARIMA(train_data, order=(1, 0, 1)).fit()
-    model = smt.ARIMA(train_data, order=(p, d, q)).fit()
-    model.summary()
-    print(model.summary())
-
-    fig, ax = plt.subplots(figsize=(15, 10))
-    fig.suptitle('Прогноз', fontsize=16)
-    ax = train_data.loc[train_data.index[-365:]].plot()
-    ax.vlines(train_data.index[-1], 0, 1.5, linestyle='-', color='r')
-    model.predict(train_data.index[-365], df.index[-1], dynamic=True, plot_insample=False, ax=ax).plot()
-    plt.show()
 
 
 
 def ARIMA(df, column):
     ps = range(2, 5)
-    d = 1
+    ds = range(0, 4)
     qs = range(2, 5)
 
     # creating list with all the possible combinations of parameters
-    parameters = product(ps, qs)
+    parameters = product(ps, ds, qs)
     parameters_list = list(parameters)
     len(parameters_list)
 
     # split dataframe to train and test dataframe (timeseries)
     len_test = 20
-    len_train = 255
+    len_train = 250
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
+    print(len_test, len_train)
 
     # select better parameters model
-    result_table = optimizeARIMA(train_df, column, parameters_list, d)
-    p, q = result_table.parameters[0]
+    result_table = optimizeARIMA(train_df, column, parameters_list)
+    p, d, q = result_table.parameters[0]
 
     # build best model
-    #best_model = sm.tsa.statespace.ARIMAX(train_df[column], order=(p, d, q)).fit()
     best_model = smt.ARIMA(train_df[column], order=(p, d, q)).fit()
     print(best_model.summary())
 
     # build plot
-    plotARIMA(df[column], column, best_model, len_test, 50)
+    plotARIMA(dfs[column], column, best_model, len_test, 50)
 
     '''
     len_test = 20
@@ -79,7 +51,7 @@ def ARIMA(df, column):
 
 
 
-def optimizeARIMA(df, column, parameters_list, d):
+def optimizeARIMA(df, column, parameters_list):
     """Return dataframe with parameters and corresponding AIC
         parameters_list - list with (p, q) tuples
         d - integration order in ARIMA model
@@ -91,8 +63,7 @@ def optimizeARIMA(df, column, parameters_list, d):
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge
         try:
-            model = smt.ARIMA(df[column], order=(param[0], d, param[1])).fit()
-            #model = sm.tsa.statespace.ARIMAX(df[column], order=(param[0], d, param[1])).fit(disp=-1)
+            model = smt.ARIMA(df[column], order=(param[0], param[1], param[2])).fit()
         except:
             continue
         aic = model.aic
@@ -132,7 +103,7 @@ def plotARIMA(series, column, model, len_test_data, len_forcast):
     data['arima_model'] = model.fittedvalues
 
     # forecasting on test_data and n_steps forward
-    forecast = model.predict(start=data.shape[0] - len_test_data, end=data.shape[0] + len_forcast)
+    forecast = model.predict(start=data.shape[0] - len_test_data - 1, end=data.shape[0] + len_forcast)
     forecast = data.arima_model.append(forecast)
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
