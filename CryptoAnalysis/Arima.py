@@ -11,7 +11,7 @@ import statsmodels.tsa.api as smt
 from Models import *
 
 
-
+    #model ARIMA
 def ARIMA(df, column):
     ps = range(2, 5)
     ds = range(0, 4)
@@ -26,40 +26,26 @@ def ARIMA(df, column):
     len_test = 20
     len_train = 250
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
-    print(len_test, len_train)
 
-    # select better parameters model
-    result_table = optimizeARIMA(train_df, column, parameters_list)
-    p, d, q = result_table.parameters[0]
-
-    # build best model
-    best_model = smt.ARIMA(train_df[column], order=(p, d, q)).fit()
+    #select better model and build model
+    best_model = optimizeARIMA(train_df, column, parameters_list)
     print(best_model.summary())
 
     # build plot
     plotARIMA(dfs[column], column, best_model, len_test, 50)
 
-    '''
-    len_test = 20
-    len_train = 255
-    dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
-
-    #best_model = sm.tsa.statespace.ARIMAX(train_df[column], order=(4, d, 4)).fit(disp=-1)
-    best_model = smt.ARIMA(train_df[column], order=(4, d, 4)).fit()
-    plotSARIMA(dfs[column], column, best_model, len_test, 50, s, d)
-    '''
 
 
-
+    #select the best model ARIMA
 def optimizeARIMA(df, column, parameters_list):
-    """Return dataframe with parameters and corresponding AIC
-        parameters_list - list with (p, q) tuples
-        d - integration order in ARIMA model
+    """Return the best model ARIMA corresponding AIC
+        parameters_list - list with (p, d, q) tuples
     """
 
     results = []
     best_aic = float("inf")
 
+    print("params    aic")
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge
         try:
@@ -80,12 +66,12 @@ def optimizeARIMA(df, column, parameters_list):
     result_table = pd.DataFrame(results)
     result_table.columns = ['parameters', 'aic']
 
-    # sorting in ascending order, the lower AIC is - the better
-    result_table = result_table.sort_values(by='aic', ascending=True).reset_index(drop=True)
 
-    return result_table
+    return best_model
 
 
+
+    #build plot ARIMA
 def plotARIMA(series, column, model, len_test_data, len_forcast):
     """Plots model vs predicted values
         series - dataset with timeseries

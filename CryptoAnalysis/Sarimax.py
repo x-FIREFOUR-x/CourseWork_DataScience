@@ -16,6 +16,8 @@ import statsmodels.tsa.api as smt
 from Models import *
 
 
+
+    #model SARIMAX
 def SARIMAX(df, column):
     ps = range(2, 5)
     d = 1
@@ -35,32 +37,19 @@ def SARIMAX(df, column):
     len_train = 225
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
-    # select better parameters model
-    result_table = optimizeSARIMAX(train_df, column, parameters_list, d, D, s)
-    p, q, P, Q = result_table.parameters[0]
 
-    # build best model
-    best_model = sm.tsa.statespace.SARIMAX(train_df[column], order=(p, d, q), seasonal_order=(P, D, Q, s)).fit(disp=-1)
+    # select better model and build
+    best_model = optimizeSARIMAX(train_df, column, parameters_list, d, D, s)
     print(best_model.summary())
 
     # build plot
     plotSARIMAX(dfs[column], column, best_model, len_test, 50, s, d)
 
-    '''
-    len_test = 20
-    len_train = 255
-    dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
-
-    best_model = sm.tsa.statespace.SARIMAX(train_df[column], order=(4, d, 4), seasonal_order=(1, D, 0, s)).fit(disp=-1)
-    plotSARIMA(dfs[column], column, best_model, len_test, 50, s, d)
-    '''
 
 
-
-    #select the best parameters model SARIMA
+    #select the best model SARIMAX
 def optimizeSARIMAX(df, column, parameters_list, d, D, s):
-    """Return dataframe with parameters and corresponding AIC
-
+    """Return the best model SARIMAX and corresponding AIC
         parameters_list - list with (p, q, P, Q) tuples
         d - integration order in ARIMA model
         D - seasonal integration order
@@ -70,6 +59,7 @@ def optimizeSARIMAX(df, column, parameters_list, d, D, s):
     results = []
     best_aic = float("inf")
 
+    print("params       aic")
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge
         try:
@@ -93,14 +83,12 @@ def optimizeSARIMAX(df, column, parameters_list, d, D, s):
     result_table = pd.DataFrame(results)
     result_table.columns = ['parameters', 'aic']
 
-    # sorting in ascending order, the lower AIC is - the better
-    result_table = result_table.sort_values(by='aic', ascending=True).reset_index(drop=True)
 
-    return result_table
+    return best_model
 
 
 
-    #build plot SARIMA
+    #build plot SARIMAX
 def plotSARIMAX(series, column, model, len_test_data, len_forcast, s, d):
     """Plots model vs predicted values
         series - dataset with timeseries

@@ -30,10 +30,13 @@ def Holt_Winter(df, column ):
 
     # select the best parameters model Holt-Winter
 def optimize_holt(df, column, parameters_list):
+    """Return the best model Holt-Winter corresponding AIC
+            parameters_list - list with (sl, st) tuples
+        """
     best_aic = float("inf")
     best_model = 0
 
-    print("aic                 param")
+    print("aic                params")
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge
         try:
@@ -50,8 +53,6 @@ def optimize_holt(df, column, parameters_list):
             best_aic = aic
             best_param = param
 
-
-    # sorting in ascending order, the lower AIC is - the bette
 
     return best_model
 
