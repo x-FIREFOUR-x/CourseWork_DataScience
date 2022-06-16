@@ -68,7 +68,7 @@ def plot_holt(df, column, model, len_test_data, len_forcast):
 
 
     # forecasting on test_data and n_steps forward
-    forecast = model.forecast(len_forcast)
+    forecast = model.fittedvalues.append(model.forecast(len_forcast))
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 
