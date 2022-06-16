@@ -7,6 +7,7 @@ from ProcessData import *
 from Analysis import *
 from Arima import *
 from Sarimax import *
+from HoltWinter import *
 
 
 
@@ -29,7 +30,8 @@ if __name__ == '__main__':
 
 
     #ARIMA(df, 'Low')
-    SARIMAX(df, 'Low')
+    #SARIMAX(df, 'Low')
+    Holt_Winter(df, 'Low')
 
 
     '''
