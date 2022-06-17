@@ -11,8 +11,6 @@ from itertools import product                    # some useful functions
 from sklearn.metrics import r2_score, median_absolute_error, mean_absolute_error, mean_absolute_percentage_error
 from sklearn.metrics import median_absolute_error, mean_squared_error, mean_squared_log_error
 
-import statsmodels.tsa.api as smt
-
 from Models import *
 
 
@@ -43,10 +41,12 @@ def SARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
     # split dataframe to train and test dataframe (timeseries)
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
-
     # select better model and build
     best_model = optimizeSARIMA(train_df, column, parameters_list, d, D, s)
     print(best_model.summary())
+
+    # test metrics
+    metrics(test_df[column], best_model)
 
     # build plot
     plotSARIMA(dfs[column], column, best_model, len_test, len_forcast, s, d)
@@ -82,7 +82,7 @@ def optimizeSARIMA(df, column, parameters_list, d, D, s):
             best_aic = aic
             best_param = param
 
-        if(model.aic > 500):
+        if(model.aic > 300):
             print(param, model.aic)
             results.append([param, model.aic])
 

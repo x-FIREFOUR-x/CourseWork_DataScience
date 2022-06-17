@@ -37,6 +37,9 @@ def ARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
     best_model = optimizeARIMA(train_df, column, parameters_list)
     print(best_model.summary())
 
+    # test metrics
+    metrics(test_df[column], best_model)
+
     # build plot
     plotARIMA(dfs[column], column, best_model, len_test, len_forcast)
 
@@ -65,7 +68,7 @@ def optimizeARIMA(df, column, parameters_list):
             best_aic = aic
             best_param = param
 
-        if(model.aic > 500):
+        if(model.aic > 300):
             print(param, model.aic)
             results.append([param, model.aic])
 

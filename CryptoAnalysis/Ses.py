@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt                  # plots
 
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing
 
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+
 from Models import *
 
 
@@ -22,6 +25,9 @@ def SES(df, column, len_train=0, len_test=0, len_forcast=50):
     # build model
     model = SimpleExpSmoothing(train_df[column]).fit()
     print(model.summary())
+
+    # test metrics
+    metrics(test_df[column], model)
 
     # build plot
     plotSES(dfs[column], column, model, len_test, len_forcast)

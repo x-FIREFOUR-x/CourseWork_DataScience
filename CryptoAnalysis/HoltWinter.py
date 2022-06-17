@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from itertools import product
 
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+
 from Models import *
 
 
@@ -23,11 +26,15 @@ def Holt_Winter(df, column, len_train=0, len_test=0, len_forcast=50 ):
     parameters = product(sl, st)
     parameters_list = list(parameters)
 
+    # split dataframe to train and test dataframe (timeseries)
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
+    # select better model and build model
     best_model = optimize_holt(train_df, column, parameters_list)
     print(best_model.summary())
 
+    # test metrics
+    metrics(test_df[column], best_model)
 
     # build plot
     plot_holt(dfs[column], column, best_model, len_test, len_forcast)
@@ -47,8 +54,8 @@ def optimize_holt(df, column, parameters_list):
         # we need try-except because on some combinations model fails to converge
         try:
             model = Holt(df[column], initialization_method="estimated").fit(
-        smoothing_level=param[0], smoothing_trend=param[1], optimized=False
-    )
+                smoothing_level=param[0], smoothing_trend=param[1], optimized=False
+            )
         except:
             continue
         aic = model.aic

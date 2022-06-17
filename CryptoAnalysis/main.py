@@ -25,8 +25,8 @@ pd.set_option('display.width', desired_width)
 
 if __name__ == '__main__':
 
-    #a = "Bitcoin"
-    a = "Aave"
+    a = "Bitcoin"
+    #a = "Aave"
     df = read_time_sequence(a)
     create_column_amountToken(df)
     print(df.head(10).to_string())
@@ -34,16 +34,16 @@ if __name__ == '__main__':
 
 
     #ARIMA(df, 'Low')
-    ARIMA(df, 'Low', 100, 30, 10)
+    ARIMA(df, 'Low', 50, 25, 20)
 
     #SARIMA(df, 'Low')
-    SARIMA(df, 'Low', 100, 30, 10)
+    SARIMA(df, 'Low', 50, 50, 20)
 
     #Holt_Winter(df, 'Low')
-    Holt_Winter(df, 'Low', 100, 30, 10)
+    Holt_Winter(df, 'Low', 50, 25, 20)
 
     # SES(df, 'Low')
-    SES(df, 'Low', 100, 30, 10)
+    SES(df, 'Low', 50, 25, 20)
 
 
 
