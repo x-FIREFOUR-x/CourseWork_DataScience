@@ -22,8 +22,8 @@ pd.set_option('display.width', desired_width)
 
 if __name__ == '__main__':
 
-    a = "Bitcoin"
-    #a = "Aave"
+    #a = "Bitcoin"
+    a = "Aave"
     df = read_time_sequence(a)
     create_column_amountToken(df)
     print(df.head(10).to_string())
