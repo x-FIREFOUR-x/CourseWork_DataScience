@@ -10,6 +10,7 @@ from Arima import *
 from Sarima import *
 from HoltWinter import *
 from Ses import *
+from Autoregression import *
 
 
 
@@ -34,16 +35,17 @@ if __name__ == '__main__':
 
 
     #ARIMA(df, 'Low')
-    ARIMA(df, 'Low', 50, 25, 20)
+    #ARIMA(df, 'Low', 100, 25, 20)
 
     #SARIMA(df, 'Low')
-    SARIMA(df, 'Low', 50, 50, 20)
+    #SARIMA(df, 'Low', 50, 50, 20)
 
     #Holt_Winter(df, 'Low')
-    Holt_Winter(df, 'Low', 50, 25, 20)
+    #Holt_Winter(df, 'Low', 50, 25, 20)
 
     # SES(df, 'Low')
-    SES(df, 'Low', 50, 25, 20)
+    #SES(df, 'Low', 50, 25, 20)
+    AR(df, 'Low', 200, 25, 20)
 
 
 
