@@ -23,6 +23,8 @@ def metrics(test, model):
     r2 = r2_score(test, forecast)
     mbpe = mean_absolute_percentage_error(test, forecast)
 
+    print('    Metrics:')
     print('mean squared error = ', mse)
     print('r2 = ', r2)
     print('mean absolute percentage error = ', mbpe)
+    print('\n')

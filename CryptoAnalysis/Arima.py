@@ -54,6 +54,7 @@ def optimizeARIMA(df, column, parameters_list):
     results = []
     best_aic = float("inf")
 
+    print("Selecting params for ARIMA")
     print("params    aic")
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge
