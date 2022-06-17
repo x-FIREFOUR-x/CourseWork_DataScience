@@ -17,8 +17,8 @@ from Models import *
 
 
 
-    #model SARIMAX
-def SARIMAX(df, column):
+    #model SARIMA
+def SARIMA(df, column):
     ps = range(2, 5)
     d = 1
     qs = range(2, 5)
@@ -39,17 +39,17 @@ def SARIMAX(df, column):
 
 
     # select better model and build
-    best_model = optimizeSARIMAX(train_df, column, parameters_list, d, D, s)
+    best_model = optimizeSARIMA(train_df, column, parameters_list, d, D, s)
     print(best_model.summary())
 
     # build plot
-    plotSARIMAX(dfs[column], column, best_model, len_test, 50, s, d)
+    plotSARIMA(dfs[column], column, best_model, len_test, 50, s, d)
 
 
 
-    #select the best model SARIMAX
-def optimizeSARIMAX(df, column, parameters_list, d, D, s):
-    """Return the best model SARIMAX and corresponding AIC
+    #select the best model SARIMA
+def optimizeSARIMA(df, column, parameters_list, d, D, s):
+    """Return the best model SARIMA and corresponding AIC
         parameters_list - list with (p, q, P, Q) tuples
         d - integration order in ARIMA model
         D - seasonal integration order
@@ -88,8 +88,8 @@ def optimizeSARIMAX(df, column, parameters_list, d, D, s):
 
 
 
-    #build plot SARIMAX
-def plotSARIMAX(series, column, model, len_test_data, len_forcast, s, d):
+    #build plot SARIMA
+def plotSARIMA(series, column, model, len_test_data, len_forcast, s, d):
     """Plots model vs predicted values
         series - dataset with timeseries
         column - column timeserias in serias
@@ -112,7 +112,7 @@ def plotSARIMAX(series, column, model, len_test_data, len_forcast, s, d):
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 
     plt.figure(figsize=(15, 7))
-    plt.title("Forkast model SARIMAX, column: " + column)
+    plt.title("Forkast model SARIMA, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(data.index[data.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')
     plt.plot(data.actual, label="actual")
