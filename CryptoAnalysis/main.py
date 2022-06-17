@@ -7,9 +7,10 @@ from ProcessData import *
 from Analysis import *
 
 from Arima import *
+from Sarima import *
 from Ses import *
 from HoltWinter import *
-from Sarima import *
+
 
 
 
@@ -31,11 +32,11 @@ if __name__ == '__main__':
     print(df.info())
 
 
-    #ARIMA(df, 'Low')
-    #SARIMAX(df, 'Low')
-    SES(df, 'Low')
-    #Holt_Winter(df, 'Low')
+    ARIMA(df, 'Low')
     SARIMA(df, 'Low')
+    SES(df, 'Low')
+    Holt_Winter(df, 'Low')
+
 
 
 
