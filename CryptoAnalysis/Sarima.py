@@ -18,7 +18,15 @@ from Models import *
 
 
     #model SARIMA
-def SARIMA(df, column):
+def SARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
+    """model SARIMA
+            df - dataframe timeseries
+            column - name column with timeserias in dataframe
+            len_train - number day train data
+            len_test - number day test data
+            len_forcast - number day predict in the future
+    """
+
     ps = range(2, 5)
     d = 1
     qs = range(2, 5)
@@ -33,8 +41,6 @@ def SARIMA(df, column):
     len(parameters_list)
 
     # split dataframe to train and test dataframe (timeseries)
-    len_test = 20
-    len_train = 225
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
 
@@ -43,7 +49,7 @@ def SARIMA(df, column):
     print(best_model.summary())
 
     # build plot
-    plotSARIMA(dfs[column], column, best_model, len_test, 50, s, d)
+    plotSARIMA(dfs[column], column, best_model, len_test, len_forcast, s, d)
 
 
 

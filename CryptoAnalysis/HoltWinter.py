@@ -9,14 +9,20 @@ from Models import *
 
 
     #built model Holt-Winter
-def Holt_Winter(df, column ):
+def Holt_Winter(df, column, len_train=0, len_test=0, len_forcast=50 ):
+    """model Holt-Winter's
+            df - dataframe timeseries
+            column - name column with timeserias in dataframe
+            len_train - number day train data
+            len_test - number day test data
+            len_forcast - number day predict in the future
+    """
+
     sl = np.arange(0, 1, 0.1)
     st = np.arange(0, 1, 0.1)
     parameters = product(sl, st)
     parameters_list = list(parameters)
 
-    len_test = 25
-    len_train = 250
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
     best_model = optimize_holt(train_df, column, parameters_list)
@@ -24,7 +30,7 @@ def Holt_Winter(df, column ):
 
 
     # build plot
-    plot_holt(dfs[column], column, best_model, len_test, 50)
+    plot_holt(dfs[column], column, best_model, len_test, len_forcast)
 
 
 

@@ -7,11 +7,16 @@ from Models import *
 
 
     # model Simple Exponent Smoothing(SES)
-def SES(df, column):
+def SES(df, column, len_train=0, len_test=0, len_forcast=50):
+    """model Simple Exponent Smoothing
+            df - dataframe timeseries
+            column - name column with timeserias in dataframe
+            len_train - number day train data
+            len_test - number day test data
+            len_forcast - number day predict in the future
+    """
 
     # split dataframe to train and test dataframe (timeseries)
-    len_test = 20
-    len_train = 200
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
     # build model
@@ -19,7 +24,7 @@ def SES(df, column):
     print(model.summary())
 
     # build plot
-    plotSES(dfs[column], column, model, len_test, 50)
+    plotSES(dfs[column], column, model, len_test, len_forcast)
 
 
 

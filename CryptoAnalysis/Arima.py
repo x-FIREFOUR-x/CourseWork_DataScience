@@ -12,7 +12,15 @@ from Models import *
 
 
     #model ARIMA
-def ARIMA(df, column):
+def ARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
+    """model ARIMA
+            df - dataframe timeseries
+            column - name column with timeserias in dataframe
+            len_train - number day train data
+            len_test - number day test data
+            len_forcast - number day predict in the future
+    """
+
     ps = range(2, 5)
     ds = range(0, 4)
     qs = range(2, 5)
@@ -23,8 +31,6 @@ def ARIMA(df, column):
     len(parameters_list)
 
     # split dataframe to train and test dataframe (timeseries)
-    len_test = 20
-    len_train = 250
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
     #select better model and build model
@@ -32,7 +38,7 @@ def ARIMA(df, column):
     print(best_model.summary())
 
     # build plot
-    plotARIMA(dfs[column], column, best_model, len_test, 50)
+    plotARIMA(dfs[column], column, best_model, len_test, len_forcast)
 
 
 

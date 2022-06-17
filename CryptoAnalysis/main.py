@@ -8,8 +8,9 @@ from Analysis import *
 
 from Arima import *
 from Sarima import *
-from Ses import *
 from HoltWinter import *
+from Ses import *
+
 
 
 
@@ -32,10 +33,17 @@ if __name__ == '__main__':
     print(df.info())
 
 
-    ARIMA(df, 'Low')
-    SARIMA(df, 'Low')
-    SES(df, 'Low')
-    Holt_Winter(df, 'Low')
+    #ARIMA(df, 'Low')
+    ARIMA(df, 'Low', 100, 30, 10)
+
+    #SARIMA(df, 'Low')
+    SARIMA(df, 'Low', 100, 30, 10)
+
+    #Holt_Winter(df, 'Low')
+    Holt_Winter(df, 'Low', 100, 30, 10)
+
+    # SES(df, 'Low')
+    SES(df, 'Low', 100, 30, 10)
 
 
 
