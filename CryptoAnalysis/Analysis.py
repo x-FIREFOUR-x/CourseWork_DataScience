@@ -17,7 +17,7 @@ def graph_timesequences(df, name_columns):
         title = title + name + ', '
     title = title + ' криптовалюти ' + df.loc[index]['Name']
 
-    fig, ax = plt.subplots(figsize=(15, 10))
+    fig, ax = plt.subplots(figsize=(12, 6))
     for name in name_columns:
         df[name].plot(ax=ax)
     plt.title(title)
@@ -36,7 +36,7 @@ def graph_interval_timesequences(df, name_columns, start_date, end_date):
     title = title + ' криптовалюти ' + df.loc[index]['Name']+\
             ' з ' + start_date + ' по ' + end_date
 
-    fig, ax = plt.subplots(figsize=(15, 10))
+    fig, ax = plt.subplots(figsize=(12, 6))
     for name in name_columns:
         df[[name]].loc[start_date + ' 00:00:00' : end_date + ' 00:00:00'].plot(ax=ax)
     plt.title(title)
@@ -51,7 +51,7 @@ def graph_timesequence_cryptos(dfs, name_column):
     for df in dfs:
         title = title + df.loc[df.index[0]]['Name'] + ', '
 
-    fig, ax = plt.subplots(figsize=(15, 10))
+    fig, ax = plt.subplots(figsize=(12, 6))
     linelegend = []
     for df in dfs:
         df[name_column].plot(ax=ax)
@@ -70,7 +70,7 @@ def graph_interval_timesequence_cryptos(dfs, name_column, start_date, end_date):
     for df in dfs:
         title = title + df.loc[df.index[0]]['Name'] + ', '
 
-    fig, ax = plt.subplots(figsize=(15, 10))
+    fig, ax = plt.subplots(figsize=(12, 6))
     linelegend = []
     for df in dfs:
         df[name_column].loc[start_date + ' 00:00:00' : end_date + ' 00:00:00'].plot(ax=ax)
@@ -100,7 +100,7 @@ def decompose(df, column):
     series = df[column]
     decomposition = smt.seasonal_decompose(series[~series.isna()])
     fig = decomposition.plot()
-    fig.set_size_inches(15, 10)
+    fig.set_size_inches(12, 6)
     title = 'Декомпозиція крипто валюти ' + df.loc[df.index[0]]['Name']
     fig.suptitle(title, fontsize=15)
     plt.show()
@@ -111,7 +111,7 @@ def decompose_interval(df, column, start_date, end_date):
     series = df[column]
     decomposition = smt.seasonal_decompose(series.loc[start_date + ' 00:00:00' : end_date + ' 00:00:00'][~series.isna()])
     fig = decomposition.plot()
-    fig.set_size_inches(15, 10)
+    fig.set_size_inches(12, 6)
     title = 'Декомпозиція крипто валюти ' + df.loc[df.index[0]]['Name']
     fig.suptitle(title, fontsize=15)
     plt.show()
@@ -139,7 +139,7 @@ def dickey_fuller_test(df, column):
     #аутокореляція і часткова автокореляція
 def autocorr_partautocorr(df, column):
     series = df[column]
-    fig, ax = plt.subplots(2, figsize=(15, 10))
+    fig, ax = plt.subplots(2, figsize=(12, 6))
     title = 'Автокореляція і часткова автокориляція ' + df.loc[df.index[0]]['Name'] + ' величини ' + column
     fig.suptitle(title, fontsize=15)
     ax[0] = plot_acf(series[~series.isna()], ax=ax[0], lags=120)
@@ -169,7 +169,7 @@ def wavelet_smoothing(x, level=1, wavelet='db4'):
 def wavelet_smoothing_plot(x, column, n):
     x = x[column]
     filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     filtered = list(filtered)
     filtered.pop(0)
@@ -184,7 +184,7 @@ def wavelet_smoothing_plot(x, column, n):
 def wavelet_smoothing_with_interval_plot(x, column, n, start_date, end_date):
     x = x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
     filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     filtered = list(filtered)
     filtered.pop(0)
@@ -204,7 +204,7 @@ def fft_smoothing_plot(x, column, sigma=40, m=1):
     XX = np.hstack((x, np.flip(x)))
     fXX = np.fft.fft(XX, n = x.shape[0])
     XXf = np.real(np.fft.ifft(fXX * win))[:x.shape[0]]
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     filtered_frame = pd.DataFrame(XXf, index=x.index)
     plt.plot(filtered_frame, label='Filtered')
@@ -220,7 +220,7 @@ def fft_smoothing_with_interval_plot(x, column, start_date, end_date, sigma=40, 
     XX = np.hstack((x, np.flip(x)))
     fXX = np.fft.fft(XX, n = x.shape[0])
     XXf = np.real(np.fft.ifft(fXX * win))[:x.shape[0]]
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     filtered_frame = pd.DataFrame(XXf, index=x.index)
     plt.plot(filtered_frame, label='Filtered')
@@ -235,7 +235,7 @@ def fft_smoothing_with_interval_plot(x, column, start_date, end_date, sigma=40, 
 def move_average_plot(x, column, n):
     x=x[column]
     rolling_mean = x.rolling(n).mean()
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     plt.plot(rolling_mean, label='Filtred')
     plt.legend(loc='upper left')
@@ -247,7 +247,7 @@ def move_average_plot(x, column, n):
 def move_average_with_interval_plot(x, column, n, start_date, end_date):
     x=x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
     rolling_mean = x.rolling(n).mean()
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     plt.plot(rolling_mean, label='Filtred')
     plt.legend(loc='upper left')

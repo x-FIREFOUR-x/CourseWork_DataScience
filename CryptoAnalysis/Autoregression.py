@@ -85,7 +85,7 @@ def plotAR(series, column, model, len_test_data, len_forcast):
     forecast = model.predict(start=data.shape[0] - len_test_data - 1, end=data.shape[0] + len_forcast)
     forecast = data.ar_model.append(forecast)
 
-    plt.figure(figsize=(15, 7))
+    plt.figure(figsize=(12, 6))
     plt.title("Forecast model AR, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(data.index[data.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')

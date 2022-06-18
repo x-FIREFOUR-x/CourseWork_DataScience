@@ -42,19 +42,19 @@ def SARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
     # select better model and build
-    best_model = optimizeSARIMA(train_df, column, parameters_list, d, D, s)
+    best_model = optimizeSARIMA(train_df, test_df, column, parameters_list, d, D, s)
     print(best_model.summary())
 
     # test metrics
     metrics(test_df[column], best_model)
 
     # build plot
-    plotSARIMA(dfs[column], column, best_model, len_test, len_forcast, s, d)
+    plotSARIMA(dfs[column], column, best_model, len_test, len_forcast)
 
 
 
     #select the best model SARIMA
-def optimizeSARIMA(df, column, parameters_list, d, D, s):
+def optimizeSARIMA(df, test, column, parameters_list, d, D, s):
     """Return the best model SARIMA and corresponding AIC
         parameters_list - list with (p, q, P, Q) tuples
         d - integration order in ARIMA model
@@ -63,10 +63,10 @@ def optimizeSARIMA(df, column, parameters_list, d, D, s):
     """
 
     results = []
-    best_aic = float("inf")
+    best_mape = float("inf")
 
     print("Selecting params for SARIMA")
-    print("params       aic")
+    print("params       mape")
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge
         try:
@@ -76,16 +76,16 @@ def optimizeSARIMA(df, column, parameters_list, d, D, s):
                                               ).fit(disp=-1)
         except:
             continue
-        aic = model.aic
-        # saving best model, AIC and parameters
-        if aic < best_aic:
-            best_model = model
-            best_aic = aic
-            best_param = param
 
-        if(model.aic > 300):
-            print(param, model.aic)
-            results.append([param, model.aic])
+        mape = mean_absolute_percentage_error(test[column], model.predict(start=test.index[0], end=test.index[-1]))
+        print(param, mape)
+
+        # saving best model, AIC and parameters
+        if (mape < best_mape ):
+            best_model = model
+            best_mape = mape
+            best_param = param
+            results.append([param, mape])
 
     result_table = pd.DataFrame(results)
     result_table.columns = ['parameters', 'aic']
@@ -96,7 +96,7 @@ def optimizeSARIMA(df, column, parameters_list, d, D, s):
 
 
     #build plot SARIMA
-def plotSARIMA(series, column, model, len_test_data, len_forcast, s, d):
+def plotSARIMA(series, column, model, len_test_data, len_forcast):
     """Plots model vs predicted values
         series - dataset with timeseries
         column - column timeserias in serias
@@ -118,7 +118,7 @@ def plotSARIMA(series, column, model, len_test_data, len_forcast, s, d):
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 
-    plt.figure(figsize=(15, 7))
+    plt.figure(figsize=(12, 6))
     plt.title("Forkast model SARIMA, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(data.index[data.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')

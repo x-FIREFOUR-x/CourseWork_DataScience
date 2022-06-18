@@ -15,3 +15,5 @@ def read_names_tokens():
 
 def create_column_amountToken(df):
     df['amountToken'] = df['Marketcap'] / df['Close']
+
+

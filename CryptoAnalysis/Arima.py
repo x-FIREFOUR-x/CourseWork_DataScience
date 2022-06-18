@@ -22,7 +22,7 @@ def ARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
     """
 
     ps = range(2, 5)
-    ds = range(0, 4)
+    ds = range(0, 5)
     qs = range(2, 5)
 
     # creating list with all the possible combinations of parameters
@@ -34,7 +34,7 @@ def ARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
 
     #select better model and build model
-    best_model = optimizeARIMA(train_df, column, parameters_list)
+    best_model = optimizeARIMA(train_df, test_df, column, parameters_list)
     print(best_model.summary())
 
     # test metrics
@@ -46,36 +46,34 @@ def ARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
 
 
     #select the best model ARIMA
-def optimizeARIMA(df, column, parameters_list):
+def optimizeARIMA(df, test, column, parameters_list):
     """Return the best model ARIMA corresponding AIC
         parameters_list - list with (p, d, q) tuples
     """
 
     results = []
-    best_aic = float("inf")
+    best_mape = float("inf")
 
     print("Selecting params for ARIMA")
-    print("params    aic")
+    print("params    mape")
+
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge
         try:
             model = smt.ARIMA(df[column], order=(param[0], param[1], param[2])).fit()
         except:
             continue
-        aic = model.aic
+
+        mape = mean_absolute_percentage_error(test[column], model.predict(start=test.index[0], end=test.index[-1]))
+        print(param, mape)
+        #plotARIMA(dfs, column, model, len_test, len_forcast)
+
         # saving best model, AIC and parameters
-        if aic < best_aic:
+        if (mape < best_mape and mape > 0.1):
             best_model = model
-            best_aic = aic
+            best_mape = mape
             best_param = param
-
-        if(model.aic > 300):
-            print(param, model.aic)
-            results.append([param, model.aic])
-
-    result_table = pd.DataFrame(results)
-    result_table.columns = ['parameters', 'aic']
-
+            results.append([param, mape])
 
     return best_model
 
@@ -104,7 +102,7 @@ def plotARIMA(series, column, model, len_test_data, len_forcast):
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 
-    plt.figure(figsize=(15, 7))
+    plt.figure(figsize=(12, 6))
     #plt.title("Forkast model SARIMA, paramet: " + column + "\nMean Absolute Percentage Error: {0:.2f}%".format(error))
     plt.title("Forkast model ARIMA, column: " + column)
     plt.plot(forecast, color='r', label="model")

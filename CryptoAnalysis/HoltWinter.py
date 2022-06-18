@@ -90,7 +90,7 @@ def plot_holt(series, column, model, len_test_data, len_forcast):
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 
-    plt.figure(figsize=(15, 7))
+    plt.figure(figsize=(12, 6))
     #plt.title("Forkast model SARIMA, paramet: " + column + "\nMean Absolute Percentage Error: {0:.2f}%".format(error))
     plt.title("Forkast model HOLT, column: " + column)
     plt.plot(forecast, color='r', label="model")

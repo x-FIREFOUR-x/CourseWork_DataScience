@@ -41,6 +41,9 @@ def console_interface():
 
         #read columns for graphics and matrix correlation
     str_columns = input('\n -Введіть колонки через пробіл: ')
+    if (str_columns == ''):
+        #str_columns = 'High Low Open Close Volume Marketcap amountToken'
+        str_columns = 'High Low Open Close'
     columns = str_columns.split(sep=' ')
 
     correlation_matrix(df)
@@ -75,7 +78,7 @@ def console_interface():
 if __name__ == '__main__':
 
     console_interface()
-    
+
     '''
     a = "Bitcoin"
     #a = "Aave"
@@ -86,17 +89,17 @@ if __name__ == '__main__':
 
 
     #ARIMA(df, 'Low')
-    #ARIMA(df, 'Low', 100, 25, 20)
+    #ARIMA(df, 'Low', 70, 20, 20)
 
     #SARIMA(df, 'Low')
-    #SARIMA(df, 'Low', 50, 50, 20)
+    #SARIMA(df, 'Low', 70, 20, 20)
 
     #Holt_Winter(df, 'Low')
-    #Holt_Winter(df, 'Low', 50, 25, 20)
+    #Holt_Winter(df, 'Low', 70, 25, 20)
 
     # SES(df, 'Low')
-    # SES(df, 'Low', 100, 25, 20)
-    # AR(df, 'Low', 100, 25, 20)
+    #SES(df, 'Low', 70, 25, 20)
+    #AR(df, 'Low', 100, 25, 20)
     '''
 
 
