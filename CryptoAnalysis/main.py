@@ -35,6 +35,7 @@ def console_interface():
         #read df(data) input token
     df = read_time_sequence(token)
     create_column_amountToken(df)
+    create_column_Prise(df)
     print(df.head(10).to_string())
     #print(df.info())
 
@@ -73,11 +74,41 @@ def console_interface():
     SES(df, 'Low', train_day, test_day, forecast_day)
 
 
+def show_tokens():
+    name_tokens = read_names_prise_tokens()
+    print(name_tokens.head(50))
+
+    str_indexs = input("Введіть індекси токенів через пробіл: ")
+
+    dfs = []
+    if(str_indexs == ''):
+        for i in range(0, name_tokens.shape[0]):
+            df = read_time_sequence(name_tokens.loc[i]['Name'])
+            create_column_amountToken(df)
+            create_column_Prise(df)
+            dfs.append(df)
+    else:
+        strs_indexs = str_indexs.split(sep=' ')
+
+        indexs = []
+        for str in strs_indexs:
+            indexs.append(int(str))
+
+        for i in indexs:
+            df = read_time_sequence(name_tokens.loc[i]['Name'])
+            create_column_amountToken(df)
+            create_column_Prise(df)
+            dfs.append(df)
+
+
+    column = input('Введіть колонку: ')
+    graph_timesequence_cryptos(dfs, column)
 
 
 if __name__ == '__main__':
 
-    console_interface()
+    #console_interface()
+    show_tokens()
 
     '''
     a = "Bitcoin"

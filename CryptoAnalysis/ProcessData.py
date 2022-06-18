@@ -13,7 +13,17 @@ def read_names_tokens():
     return name_tokens
 
 
+def read_names_prise_tokens():
+    query = "SELECT [Name], Max([Low]) AS [Prise] FROM Cryptocurrency GROUP BY [Name] ORDER BY [Prise]"
+    name_tokens = pd.read_sql(query, engine)
+    return name_tokens
+
+
 def create_column_amountToken(df):
     df['amountToken'] = df['Marketcap'] / df['Close']
+
+
+def create_column_Prise(df):
+    df['Prise'] = (df['High'] + df['Low'])/2
 
 
