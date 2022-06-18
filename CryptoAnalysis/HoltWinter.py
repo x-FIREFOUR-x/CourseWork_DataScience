@@ -49,6 +49,7 @@ def optimize_holt(df, column, parameters_list):
     best_aic = float("inf")
     best_model = 0
 
+    print("Selecting params for Holt-Winter's")
     print("aic                params")
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge

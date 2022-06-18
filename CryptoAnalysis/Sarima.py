@@ -65,6 +65,7 @@ def optimizeSARIMA(df, column, parameters_list, d, D, s):
     results = []
     best_aic = float("inf")
 
+    print("Selecting params for SARIMA")
     print("params       aic")
     for param in parameters_list:
         # we need try-except because on some combinations model fails to converge

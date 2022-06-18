@@ -13,9 +13,6 @@ from Ses import *
 from Autoregression import *
 
 
-
-
-
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_colwidth', None)
@@ -23,9 +20,62 @@ desired_width = 300
 pd.set_option('display.width', desired_width)
 
 
+def console_interface():
+
+        #read all name tokens in df
+    name_tokens = read_names_tokens()
+    print(name_tokens.head(50))
+
+
+        #read index token and input df name token
+    index_token = int(input('\n -Input index: '))
+    token = name_tokens.loc[index_token]['Name']
+
+
+        #read df(data) input token
+    df = read_time_sequence(token)
+    create_column_amountToken(df)
+    print(df.head(10).to_string())
+    #print(df.info())
+
+
+        #read columns for graphics and matrix correlation
+    str_columns = input('\n -Введіть колонки через пробіл: ')
+    columns = str_columns.split(sep=' ')
+
+    correlation_matrix(df)
+    graph_timesequences(df, columns)
+
+
+        # read column timeseries which analysis and forcast
+    column = input('\n -Введіть колонку, яку будем аналізувати і прогнозувати: ')
+
+    dickey_fuller_test(df, column)
+    autocorr_partautocorr(df, column)
+
+    wavelet_smoothing_plot(df, column, 5)
+    fft_smoothing_plot(df, column)
+    move_average_plot(df, column, 10)
+
+
+    train_day = int(input('\n -Введіть кількість днів для тренувальної послідовності: '))
+    test_day = int(input(' -Введіть кількість днів для тестувальної послідовності: '))
+    forecast_day = int(input(' -Введіть кількість днів на яку буде зроблено прогноз: '))
+
+    print()
+    ARIMA(df, 'Low', train_day, test_day, forecast_day)
+    SARIMA(df, 'Low', train_day, test_day, forecast_day)
+    Holt_Winter(df, 'Low', train_day, test_day, forecast_day)
+    SES(df, 'Low', train_day, test_day, forecast_day)
+
+
+
 
 if __name__ == '__main__':
 
+    console_interface()
+    
+    '''
     a = "Bitcoin"
     #a = "Aave"
     df = read_time_sequence(a)
@@ -46,7 +96,6 @@ if __name__ == '__main__':
     # SES(df, 'Low')
     SES(df, 'Low', 100, 25, 20)
     AR(df, 'Low', 100, 25, 20)
-
 
 
 
