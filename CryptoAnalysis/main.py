@@ -20,7 +20,7 @@ desired_width = 300
 pd.set_option('display.width', desired_width)
 
 
-def console_interface():
+def analysis_forcast():
 
         #read all name tokens in df
     name_tokens = read_names_tokens()
@@ -104,11 +104,25 @@ def show_tokens():
     column = input('Введіть колонку: ')
     graph_timesequence_cryptos(dfs, column)
 
+def console_interface():
+    process = True
+    while process:
+        modul = input('Введіть: 1 -візуалізація токенів, 2 -аналіз і прогноз, інше -вихід: ')
+        if modul == '1':
+            show_tokens()
+        else:
+            if modul == '2':
+                analysis_forcast()
+            else:
+                process = False
+
 
 if __name__ == '__main__':
 
-    #console_interface()
-    show_tokens()
+    console_interface()
+
+    #analysis_forcast()
+    #show_tokens()
 
     '''
     a = "Bitcoin"
