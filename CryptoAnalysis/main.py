@@ -63,6 +63,7 @@ def console_interface():
     forecast_day = int(input(' -Введіть кількість днів на яку буде зроблено прогноз: '))
 
     print()
+    AR(df, 'Low', train_day, test_day, forecast_day)
     ARIMA(df, 'Low', train_day, test_day, forecast_day)
     SARIMA(df, 'Low', train_day, test_day, forecast_day)
     Holt_Winter(df, 'Low', train_day, test_day, forecast_day)
@@ -94,9 +95,9 @@ if __name__ == '__main__':
     #Holt_Winter(df, 'Low', 50, 25, 20)
 
     # SES(df, 'Low')
-    SES(df, 'Low', 100, 25, 20)
-    AR(df, 'Low', 100, 25, 20)
-
+    # SES(df, 'Low', 100, 25, 20)
+    # AR(df, 'Low', 100, 25, 20)
+    '''
 
 
     '''

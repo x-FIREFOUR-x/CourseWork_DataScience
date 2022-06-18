@@ -44,7 +44,8 @@ def optimizeAR(df, column, parameters_list, test):
     best_model = 0
     best_lags = 0
 
-    print("lags    mape")
+    print("Selecting params for AR")
+    print("lags   mape")
     for lags in parameters_list:
         # we need try-except because on some combinations model fails to converge
         try:
@@ -58,7 +59,7 @@ def optimizeAR(df, column, parameters_list, test):
             best_model = model
             best_mape = mape
             best_lags = lags
-            print(lags, mape)
+            print(lags, "   ", mape)
     return (best_model, best_lags)
 
 
