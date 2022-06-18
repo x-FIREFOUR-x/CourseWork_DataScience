@@ -19,11 +19,11 @@ def read_names_prise_tokens():
     return name_tokens
 
 
-def create_column_amountToken(df):
-    df['amountToken'] = df['Marketcap'] / df['Close']
+def create_column_amount(df):
+    df['Amount'] = df['Marketcap'] / df['Close']
 
 
-def create_column_Prise(df):
-    df['Prise'] = (df['High'] + df['Low'])/2
+def create_column_price(df):
+    df['Price'] = (df['High'] + df['Low'])/2
 
 

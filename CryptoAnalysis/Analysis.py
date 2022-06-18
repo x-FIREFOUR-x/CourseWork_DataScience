@@ -87,7 +87,7 @@ def graph_interval_timesequence_cryptos(dfs, name_column, start_date, end_date):
 
     #матриця кореляції
 def correlation_matrix(df):
-    corr = df[['High', 'Low', 'Open', 'Close', 'Volume', 'Marketcap', 'amountToken']].corr()
+    corr = df[['High', 'Low', 'Open', 'Close', 'Volume', 'Marketcap', 'Amount', 'Price']].corr()
     print("Matrix correlation " + df.loc[df.index[0]]['Name'])
     print(corr)
 

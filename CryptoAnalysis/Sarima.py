@@ -64,6 +64,7 @@ def optimizeSARIMA(df, test, column, parameters_list, d, D, s):
 
     results = []
     best_mape = float("inf")
+    best_model = 0
 
     print("Selecting params for SARIMA")
     print("params       mape")
@@ -87,8 +88,8 @@ def optimizeSARIMA(df, test, column, parameters_list, d, D, s):
             best_param = param
             results.append([param, mape])
 
-    result_table = pd.DataFrame(results)
-    result_table.columns = ['parameters', 'aic']
+    #result_table = pd.DataFrame(results)
+    #result_table.columns = ['parameters', 'aic']
 
 
     return best_model

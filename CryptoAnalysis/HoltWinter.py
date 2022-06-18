@@ -92,7 +92,7 @@ def plot_holt(series, column, model, len_test_data, len_forcast):
 
     plt.figure(figsize=(12, 6))
     #plt.title("Forkast model SARIMA, paramet: " + column + "\nMean Absolute Percentage Error: {0:.2f}%".format(error))
-    plt.title("Forkast model HOLT, column: " + column)
+    plt.title("Forkast model Holt-Winter's, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(series.index[series.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')
     plt.plot(series, label="actual")

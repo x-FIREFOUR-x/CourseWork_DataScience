@@ -53,6 +53,7 @@ def optimizeARIMA(df, test, column, parameters_list):
 
     results = []
     best_mape = float("inf")
+    best_model = 0
 
     print("Selecting params for ARIMA")
     print("params    mape")
@@ -74,6 +75,7 @@ def optimizeARIMA(df, test, column, parameters_list):
             best_mape = mape
             best_param = param
             results.append([param, mape])
+
 
     return best_model
 

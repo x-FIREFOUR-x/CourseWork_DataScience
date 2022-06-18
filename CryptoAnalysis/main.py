@@ -34,8 +34,8 @@ def analysis_forcast():
 
         #read df(data) input token
     df = read_time_sequence(token)
-    create_column_amountToken(df)
-    create_column_Prise(df)
+    create_column_amount(df)
+    create_column_price(df)
     print(df.head(10).to_string())
     #print(df.info())
 
@@ -55,6 +55,7 @@ def analysis_forcast():
     column = input('\n -Введіть колонку, яку будем аналізувати і прогнозувати: ')
 
     dickey_fuller_test(df, column)
+    decompose(df, column)
     autocorr_partautocorr(df, column)
 
     wavelet_smoothing_plot(df, column, 5)
@@ -67,11 +68,11 @@ def analysis_forcast():
     forecast_day = int(input(' -Введіть кількість днів на яку буде зроблено прогноз: '))
 
     print()
-    AR(df, 'Low', train_day, test_day, forecast_day)
-    ARIMA(df, 'Low', train_day, test_day, forecast_day)
-    SARIMA(df, 'Low', train_day, test_day, forecast_day)
-    Holt_Winter(df, 'Low', train_day, test_day, forecast_day)
-    SES(df, 'Low', train_day, test_day, forecast_day)
+    AR(df, column, train_day, test_day, forecast_day)
+    ARIMA(df, column, train_day, test_day, forecast_day)
+    SARIMA(df, column, train_day, test_day, forecast_day)
+    Holt_Winter(df, column, train_day, test_day, forecast_day)
+    SES(df, column, train_day, test_day, forecast_day)
 
 
 def show_tokens():
@@ -84,8 +85,8 @@ def show_tokens():
     if(str_indexs == ''):
         for i in range(0, name_tokens.shape[0]):
             df = read_time_sequence(name_tokens.loc[i]['Name'])
-            create_column_amountToken(df)
-            create_column_Prise(df)
+            create_column_amount(df)
+            create_column_price(df)
             dfs.append(df)
     else:
         strs_indexs = str_indexs.split(sep=' ')
@@ -96,8 +97,8 @@ def show_tokens():
 
         for i in indexs:
             df = read_time_sequence(name_tokens.loc[i]['Name'])
-            create_column_amountToken(df)
-            create_column_Prise(df)
+            create_column_amount(df)
+            create_column_price(df)
             dfs.append(df)
 
 
