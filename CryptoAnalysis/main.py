@@ -44,7 +44,7 @@ if __name__ == '__main__':
     #Holt_Winter(df, 'Low', 50, 25, 20)
 
     # SES(df, 'Low')
-    #SES(df, 'Low', 50, 25, 20)
+    #SES(df, 'Low', 80, 25, 20)
     AR(df, 'Low', 200, 25, 20)
 
 

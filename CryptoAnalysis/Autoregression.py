@@ -3,7 +3,6 @@ warnings.filterwarnings('ignore')
 
 import pandas as pd                              # tables and data manipulations
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error  # plots
 
 from statsmodels.tsa.ar_model import AutoReg
 
@@ -20,9 +19,8 @@ def AR(df, column, len_train=0, len_test=0, len_forcast=50):
             len_forcast - number day predict in the future
     """
 
-    lags = 35
-
-    # creating list with all the possible combinations of parameters
+    lags = 27
+    len_train = len_train + lags
 
     # split dataframe to train and test dataframe (timeseries)
     dfs, train_df, test_df, len_train, len_test = train_test_data(df, column, len_train, len_test)
@@ -35,7 +33,7 @@ def AR(df, column, len_train=0, len_test=0, len_forcast=50):
     metrics(test_df[column], best_model)
 
     # build plot
-    plotAR(dfs[column], column, best_model, len_test, len_forcast)
+    plotAR(dfs[column], column, best_model, len_test, len_forcast, lags)
 
 
 
@@ -46,7 +44,7 @@ def optimizeAR(df, column, lags):
 
 
     #build plot AR
-def plotAR(series, column, model, len_test_data, len_forcast):
+def plotAR(series, column, model, len_test_data, len_forcast, lags):
     """Plots model vs predicted values
         series - dataset with timeseries
         column - column timeserias in serias
@@ -66,11 +64,13 @@ def plotAR(series, column, model, len_test_data, len_forcast):
     forecast = model.predict(start=data.shape[0] - len_test_data - 1, end=data.shape[0] + len_forcast)
     forecast = data.ar_model.append(forecast)
 
+    #data = data[lags:]
+
     plt.figure(figsize=(15, 7))
     plt.title("Forecast model AR, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(data.index[data.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')
-    plt.plot(data.actual, label="actual")
+    plt.plot(data.actual[lags:], label="actual")
     plt.legend()
     plt.grid(True)
     plt.show()
