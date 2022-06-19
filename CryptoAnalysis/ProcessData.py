@@ -14,7 +14,7 @@ def read_names_tokens():
 
 
 def read_names_prise_tokens():
-    query = "SELECT [Name], Max([Low]) AS [Prise] FROM Cryptocurrency GROUP BY [Name] ORDER BY [Prise]"
+    query = "SELECT [Name], Max([Low]) AS [Prise], Count(*) AS Count FROM Cryptocurrency GROUP BY [Name] ORDER BY [Prise]"
     name_tokens = pd.read_sql(query, engine)
     return name_tokens
 

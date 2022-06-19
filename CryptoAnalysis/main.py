@@ -60,17 +60,19 @@ def analysis_forcast():
 
     wavelet_smoothing_plot(df, column, 5)
     fft_smoothing_plot(df, column)
-    move_average_plot(df, column, 10)
+    filtred =move_average_plot(df, column, 10)
 
 
     train_day = int(input('\n -Введіть кількість днів для тренувальної послідовності: '))
     test_day = int(input(' -Введіть кількість днів для тестувальної послідовності: '))
     forecast_day = int(input(' -Введіть кількість днів на яку буде зроблено прогноз: '))
 
-    print()
     AR(df, column, train_day, test_day, forecast_day)
     ARIMA(df, column, train_day, test_day, forecast_day)
     SARIMA(df, column, train_day, test_day, forecast_day)
+    #AR(filtred, column, train_day, test_day, forecast_day)
+    #ARIMA(filtred, column, train_day, test_day, forecast_day)
+    #SARIMA(filtred, column, train_day, test_day, forecast_day)
     Holt_Winter(df, column, train_day, test_day, forecast_day)
     SES(df, column, train_day, test_day, forecast_day)
 

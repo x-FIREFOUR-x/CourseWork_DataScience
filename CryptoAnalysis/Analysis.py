@@ -140,7 +140,7 @@ def dickey_fuller_test(df, column):
 def autocorr_partautocorr(df, column):
     series = df[column]
     fig, ax = plt.subplots(2, figsize=(12, 6))
-    title = 'Автокореляція і часткова автокориляція ' + df.loc[df.index[0]]['Name'] + ' величини ' + column
+    title = 'Автокореляція і часткова автокореляція ' + df.loc[df.index[0]]['Name'] + ' величини ' + column
     fig.suptitle(title, fontsize=15)
     ax[0] = plot_acf(series[~series.isna()], ax=ax[0], lags=120)
     ax[1] = plot_pacf(series[~series.isna()], ax=ax[1], lags=120)
@@ -172,12 +172,13 @@ def wavelet_smoothing_plot(x, column, n):
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     filtered = list(filtered)
-    filtered.pop(0)
-    filtered_frame = pd.DataFrame(filtered, index = x.index)
+    filtered_frame = pd.DataFrame(filtered, columns=[column], index = x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
     plt.title(f"DWT Denoising with {n} Wavelets, {column}", size=15)
     plt.show()
+
+    return filtered_frame
 
 
     #побудова графіка згладжуваних послідовностей на інтервалі методом Вейвлет
@@ -188,11 +189,13 @@ def wavelet_smoothing_with_interval_plot(x, column, n, start_date, end_date):
     plt.plot(x, label='Raw')
     filtered = list(filtered)
     filtered.pop(0)
-    filtered_frame = pd.DataFrame(filtered, index = x.index)
+    filtered_frame = pd.DataFrame(filtered, columns=[column], index = x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
     plt.title(f"DWT Denoising with {n} Wavelets, {column}", size=15)
     plt.show()
+
+    return filtered_frame
 
 
 
@@ -206,11 +209,13 @@ def fft_smoothing_plot(x, column, sigma=40, m=1):
     XXf = np.real(np.fft.ifft(fXX * win))[:x.shape[0]]
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
-    filtered_frame = pd.DataFrame(XXf, index=x.index)
+    filtered_frame = pd.DataFrame(XXf, columns=[column], index=x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
     plt.title(f"FFT Denoising with sigma = {sigma} and m = {m}, {column}", size=15)
     plt.show()
+
+    return filtered_frame
 
 
     #побудова графіка згладжуваних послідовностей на інтервалі методом Фур'є
@@ -222,11 +227,13 @@ def fft_smoothing_with_interval_plot(x, column, start_date, end_date, sigma=40, 
     XXf = np.real(np.fft.ifft(fXX * win))[:x.shape[0]]
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
-    filtered_frame = pd.DataFrame(XXf, index=x.index)
+    filtered_frame = pd.DataFrame(XXf, columns=[column], index=x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
     plt.title(f"FFT Denoising with sigma = {sigma} and m = {m}, {column}", size=15)
     plt.show()
+
+    return filtered_frame
 
 
 
@@ -235,22 +242,28 @@ def fft_smoothing_with_interval_plot(x, column, start_date, end_date, sigma=40, 
 def move_average_plot(x, column, n):
     x=x[column]
     rolling_mean = x.rolling(n).mean()
+    rolling_mean = pd.DataFrame(rolling_mean, columns=[column], index=x.index)
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     plt.plot(rolling_mean, label='Filtred')
     plt.legend(loc='upper left')
     plt.title(f'Rolling with n = {n}, {column}', size=15)
     plt.show()
+
+    return rolling_mean
 
 
     #побудова графіка згладжуваних послідовностей на інтервалі методом ковзаючого середнього
 def move_average_with_interval_plot(x, column, n, start_date, end_date):
     x=x[column].loc[start_date + ' 00:00:00': end_date + ' 00:00:00'][~x[column].isna()]
     rolling_mean = x.rolling(n).mean()
+    rolling_mean = pd.DataFrame(rolling_mean, columns=[column], index=x.index)
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     plt.plot(rolling_mean, label='Filtred')
     plt.legend(loc='upper left')
     plt.title(f'Rolling with n = {n}, {column}', size=15)
     plt.show()
+
+    return rolling_mean
 
