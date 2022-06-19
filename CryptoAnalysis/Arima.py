@@ -39,9 +39,11 @@ def ARIMA(df, column, len_train=0, len_test=0, len_forcast=50):
 
     # test metrics
     metrics(test_df[column], best_model)
+    st_residual_plot(test_df[column], best_model)
 
     # build plot
     plotARIMA(dfs[column], column, best_model, len_test, len_forcast)
+
 
 
 
@@ -101,11 +103,9 @@ def plotARIMA(series, column, model, len_test_data, len_forcast):
     # forecasting on test_data and n_steps forward
     forecast = model.predict(start=data.shape[0] - len_test_data - 1, end=data.shape[0] + len_forcast)
     forecast = data.arima_model.append(forecast)
-
-    #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
+    qq_plot(forecast)
 
     plt.figure(figsize=(12, 6))
-    #plt.title("Forkast model SARIMA, paramet: " + column + "\nMean Absolute Percentage Error: {0:.2f}%".format(error))
     plt.title("Forkast model ARIMA, column: " + column)
     plt.plot(forecast, color='r', label="model")
     plt.axvspan(data.index[data.shape[0] - len_test_data - 1], forecast.index[-1], alpha=0.5, color='lightgrey')

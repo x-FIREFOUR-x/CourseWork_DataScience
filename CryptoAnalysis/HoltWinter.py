@@ -35,6 +35,7 @@ def Holt_Winter(df, column, len_train=0, len_test=0, len_forcast=50 ):
 
     # test metrics
     metrics(test_df[column], best_model)
+    st_residual_plot(test_df[column], best_model)
 
     # build plot
     plot_holt(dfs[column], column, best_model, len_test, len_forcast)
@@ -87,6 +88,8 @@ def plot_holt(series, column, model, len_test_data, len_forcast):
 
     #forecasting on test_data and n_steps forward
     forecast = forecast_train_data.append(model.forecast(len_test_data+len_forcast))
+
+    qq_plot(forecast)
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 

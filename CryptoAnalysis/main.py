@@ -121,8 +121,10 @@ def console_interface():
 
 
 if __name__ == '__main__':
-
-    console_interface()
+    a = "Aave"
+    df = read_time_sequence(a)
+    AR(df, 'Low', 100, 25, 20)
+    #console_interface()
 
     #analysis_forcast()
     #show_tokens()

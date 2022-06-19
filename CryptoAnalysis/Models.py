@@ -1,4 +1,7 @@
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_percentage_error
+import pylab
+import matplotlib.pyplot as plt
+import scipy.stats as stats
 
 
     #split dataframe to train and test dataframes (timeseries)
@@ -28,3 +31,19 @@ def metrics(test, model):
     print('r2 = ', r2)
     print('mean absolute percentage error = ', mape)
     print('\n')
+
+def qq_plot(series):
+    stats.probplot(series, dist="norm", plot=pylab)
+    pylab.show()
+
+def st_residual_plot(test, model):
+    forecast = model.predict(start=test.index[0], end=test.index[-1])
+    series = test-forecast
+    mean = series.mean()
+    std = series.std()
+    standardized_residuals = (series - mean)/std
+    plt.figure(figsize=(12, 6))
+    plt.title("Standardized residuals")
+    plt.plot(standardized_residuals)
+    plt.grid(True)
+    plt.show()
