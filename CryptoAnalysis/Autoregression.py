@@ -1,9 +1,7 @@
-import warnings                                  # do not disturbe mode
+import warnings
 warnings.filterwarnings('ignore')
 
-import pandas as pd                              # tables and data manipulations
-import matplotlib.pyplot as plt
-
+import pandas as pd
 from statsmodels.tsa.ar_model import AutoReg
 
 from Models import *

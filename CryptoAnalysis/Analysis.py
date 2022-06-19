@@ -3,7 +3,6 @@ import statsmodels.tsa.api as smt
 import pandas as pd
 import numpy as np
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-from scipy.fftpack import ifft
 from scipy import signal
 import pywt
 

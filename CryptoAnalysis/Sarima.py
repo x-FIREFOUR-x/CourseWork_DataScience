@@ -1,15 +1,9 @@
-import warnings                                  # do not disturbe mode
+import warnings
 warnings.filterwarnings('ignore')
 
-import pandas as pd                              # tables and data manipulations
-import matplotlib.pyplot as plt                  # plots
-
+import pandas as pd
 import statsmodels.api as sm
-
-from itertools import product                    # some useful functions
-
-from sklearn.metrics import r2_score, median_absolute_error, mean_absolute_error, mean_absolute_percentage_error
-from sklearn.metrics import median_absolute_error, mean_squared_error, mean_squared_log_error
+from itertools import product
 
 from Models import *
 

@@ -1,11 +1,7 @@
 import warnings                                  # do not disturbe mode
 warnings.filterwarnings('ignore')
-
-import pandas as pd                              # tables and data manipulations
-import matplotlib.pyplot as plt                  # plots
-
-from itertools import product                    # some useful functions
-
+import pandas as pd
+from itertools import product
 import statsmodels.tsa.api as smt
 
 from Models import *

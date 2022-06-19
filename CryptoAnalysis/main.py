@@ -1,8 +1,3 @@
-import pandas as pd
-from sqlalchemy.engine import URL
-from sqlalchemy import create_engine
-
-from Config import engine
 from ProcessData import *
 from Analysis import *
 

@@ -1,10 +1,5 @@
-import pandas as pd                              # tables and data manipulations
-import matplotlib.pyplot as plt                  # plots
-
+import pandas as pd
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing
-
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
 
 from Models import *
 

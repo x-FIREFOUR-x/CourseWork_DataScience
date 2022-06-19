@@ -1,11 +1,7 @@
 from statsmodels.tsa.api import Holt
-import matplotlib.pyplot as plt
 
 import numpy as np
 from itertools import product
-
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
 
 from Models import *
 
