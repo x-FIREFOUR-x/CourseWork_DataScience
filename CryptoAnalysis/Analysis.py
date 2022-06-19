@@ -171,8 +171,7 @@ def wavelet_smoothing_plot(x, column, n):
     filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
-    filtered = list(filtered)
-    #filtered.pop(0)
+    filtered = filtered[:x.shape[0]]
     filtered_frame = pd.DataFrame(filtered, columns=[column], index = x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()
@@ -188,8 +187,7 @@ def wavelet_smoothing_with_interval_plot(x, column, n, start_date, end_date):
     filtered = wavelet_smoothing(x, wavelet='bior3.1', level=n)
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
-    filtered = list(filtered)
-    filtered.pop(0)
+    filtered = filtered[:x.shape[0]]
     filtered_frame = pd.DataFrame(filtered, columns=[column], index = x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()

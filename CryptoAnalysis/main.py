@@ -58,7 +58,7 @@ def analysis_forcast():
     decompose(df, column)
     autocorr_partautocorr(df, column)
 
-    #wavelet_smoothing_plot(df, column, 5)
+    wavelet_smoothing_plot(df, column, 5)
     fft_smoothing_plot(df, column)
     filtred =move_average_plot(df, column, 10)
 
