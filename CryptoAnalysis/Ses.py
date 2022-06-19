@@ -28,10 +28,10 @@ def SES(df, column, len_train=0, len_test=0, len_forcast=50):
 
     # test metrics
     metrics(test_df[column], model)
-    st_residual_plot(test_df[column], model)
 
     # build plot
     plotSES(dfs[column], column, model, len_test, len_forcast)
+    qq_and_residual_plot(test_df[column], model)
 
 
 
@@ -55,7 +55,6 @@ def plotSES(series, column, model, len_test_data, len_forcast):
     # forecasting on test_data and n_steps forward
     forecast = model.predict(start=data.shape[0] - len_test_data - 1, end=data.shape[0] + len_forcast)
     forecast = data.sarima_model.append(forecast)
-    qq_plot(forecast)
 
     #error = mean_absolute_percentage_error(data['actual'][s + d:], data['sarima_model'][s + d:])
 

@@ -31,11 +31,10 @@ def AR(df, column, len_train=0, len_test=0, len_forcast=50):
 
     # test metrics
     metrics(test_df[column], best_model)
-    st_residual_plot(test_df[column], best_model)
 
     # build plot
     plotAR(dfs[column], column, best_model, len_test, len_forcast)
-
+    qq_and_residual_plot(test_df[column], best_model)
 
 
     #select the best model AR
@@ -85,7 +84,6 @@ def plotAR(series, column, model, len_test_data, len_forcast):
     # forecasting on test_data and n_steps forward
     forecast = model.predict(start=data.shape[0] - len_test_data - 1, end=data.shape[0] + len_forcast)
     forecast = data.ar_model.append(forecast)
-    qq_plot(forecast)
 
     plt.figure(figsize=(12, 6))
     plt.title("Forecast model AR, column: " + column)

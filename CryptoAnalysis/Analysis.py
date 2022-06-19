@@ -172,6 +172,7 @@ def wavelet_smoothing_plot(x, column, n):
     plt.figure(figsize=(12, 6))
     plt.plot(x, label='Raw')
     filtered = list(filtered)
+    #filtered.pop(0)
     filtered_frame = pd.DataFrame(filtered, columns=[column], index = x.index)
     plt.plot(filtered_frame, label='Filtered')
     plt.legend()

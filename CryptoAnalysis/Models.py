@@ -47,3 +47,20 @@ def st_residual_plot(test, model):
     plt.plot(standardized_residuals)
     plt.grid(True)
     plt.show()
+
+def qq_and_residual_plot(test, model):
+    forecast = model.predict(start=test.index[0], end=test.index[-1])
+    series = test - forecast
+    mean = series.mean()
+    std = series.std()
+    standardized_residuals = (series - mean) / std
+
+    fig, ax = plt.subplots(2, figsize=(12, 7))
+
+    ax[0].set_title("Standardized residuals")
+    ax[0].plot(standardized_residuals)
+    ax[0].grid(True)
+    ax[1] = stats.probplot(forecast, dist="norm", plot=pylab)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
